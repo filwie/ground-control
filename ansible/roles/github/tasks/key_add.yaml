@@ -1,0 +1,39 @@
+---
+- name: check if API token exists
+  uri:
+    url: "{{ github_url }}/authorizations"
+    user: "{{ github_username }}"
+    password: "{{ github_password }}"
+    force_basic_auth: true
+    headers:
+      X-GitHub-OTP: "{{ github_otp }}"
+    status_code: 200
+  register: github_existing_tokens_result
+
+- name: display existing tokens
+  debug:
+    msg: "{{ github_existing_tokens }}.json"
+
+- name: check if API token already exists
+  set_fact:
+    github_token_exists: true
+  loop: "{{ github_existing_tokens_result }}.json"
+  loop_control:
+    loop_var: existing_token
+  when: existing_token.note == github_api_token_spec.note
+
+- debug:
+    msg: "{{ github_token_exists }}"
+
+      #    - name: create API token for managing public keys
+      #      uri:
+      #        url: "{{ github_url }}/authorizations"
+      #        method: POST
+      #        user: "{{ github_username }}"
+      #        password: "{{ github_password }}"
+      #        force_basic_auth: true
+      #        headers:
+      #          X-GitHub-OTP: "{{ github_otp }}"
+      #        body: "{{ github_api_token_spec }}"
+      #        body_format: json
+      #        status_code: 201

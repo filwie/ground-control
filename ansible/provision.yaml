@@ -1,0 +1,10 @@
+---
+- hosts: all
+  vars_prompt:
+    - name: kek
+      prompt: kek?
+      private: false
+  tasks:
+    - name: kek
+      debug:
+        msg: "{{ kek }}"
