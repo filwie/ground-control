@@ -1,0 +1,4 @@
+
+github_ssh_config_block: |
+  Host github.com
+  IdentityFile {{ github_ssh_identity_file }}
