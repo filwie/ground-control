@@ -1,5 +1,24 @@
 # Ground Control
 
+## Roles
+
+### arch_reflector
+
+- Installs `reflector`
+- creates `systemd` service and timer
+
+Defaults:
+
+- repositories are sorted once a week
+- only HTTPS repositories are selected
+- 100 most recently synchronized repositories are used
+
+Reference:
+
+- [reflector](https://wiki.archlinux.org/index.php/Reflector)
+- [systemd/timers](https://wiki.archlinux.org/index.php/Systemd/Timers)
+
+
 ## Vagrant and interactive Ansible playbooks / shell scripts
 
 Those do not mix - find a way to manage variables. Maybe env vars, dotenv file or something.
