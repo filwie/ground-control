@@ -17,8 +17,11 @@ Vagrant.configure(VAGRANT_API_VERSION) do |config|
   
   config.vm.provider :virtualbox do |vbox|
     vbox.name = "arch"
+    vbox.gui = true
     vbox.memory = 4048
     vbox.cpus = 2
+    vbox.customize ["modifyvm", :id, "--vram", 64]
+    vbox.customize ["modifyvm", :id, "--accelerate3d", "on"]
   end
   
   # no python equals no Ansible
