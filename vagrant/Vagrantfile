@@ -6,7 +6,7 @@ VAGRANT_HOSTNAME = "arch"
 
 ANSIBLE_PLAYBOOK = "../ansible/provision.yaml"
 ANSIBLE_GROUP = "vagrant"
-ANSIBLE_AS_ROOT = true
+ANSIBLE_AS_ROOT = false
 
 Vagrant.configure(VAGRANT_API_VERSION) do |config|
   config.vm.box = VAGRANT_BOX
@@ -17,7 +17,7 @@ Vagrant.configure(VAGRANT_API_VERSION) do |config|
   
   config.vm.provider :virtualbox do |vbox|
     vbox.name = "arch"
-    vbox.gui = true
+    vbox.gui = false
     vbox.memory = 4048
     vbox.cpus = 2
     vbox.customize ["modifyvm", :id, "--vram", 64]
