@@ -6,8 +6,8 @@
 
 - name: template reflector service and timer files
   template:
-    src: "{{ item }}.j2"
-    dest: "{{ arch_reflector_service_timer_dir }}/{{ item }}"
+    src: '{{ item }}.j2'
+    dest: '{{ arch_reflector_service_timer_dir }}/{{ item }}'
   become: true
   loop:
     - reflector.service
