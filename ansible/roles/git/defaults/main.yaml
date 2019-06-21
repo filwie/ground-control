@@ -1,0 +1,14 @@
+git_user_name: ''
+git_user_email: ''
+
+git_gitconfig_path: '{{ ansible_env.HOME }}/.gitconfig'
+git_core_excludesfile: '{{ ansible_env.HOME }}/.gitglobalignore'
+
+git_editor_env: '{{}}'
+
+git_core_editor: vim
+git_merge_tool: vimdiff
+git_diff_tool: vimdiff
+
+git_aliases:
+    - aliases: '!git config -l | grep alias | cut -c 7-'
