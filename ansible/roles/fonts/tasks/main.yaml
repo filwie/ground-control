@@ -1,0 +1,21 @@
+---
+- name: gather os specific variables
+  include_vars: '{{ "MacOSX.yaml" if ansible_distribution == "MacOSX" else "Linux.yaml"}}'
+
+- name: make sure fontconfig is installed
+  package:
+    name: fontconfig
+    state: present
+  become: '{{ fonts_become_to_install_packages }}'
+
+- name: create directory for fonts if it does not exist
+  file:
+    path: '{{ fonts_directory }}'
+    state: directory
+
+- name: download fonts
+  get_url:
+    url: '{{ item }}'
+    dest: '{{ fonts_directory }}'
+  loop: '{{ fonts_download_urls }}'
+  notify: update font cache

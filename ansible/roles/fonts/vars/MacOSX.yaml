@@ -1,0 +1,2 @@
+fonts_become_to_install_packages: false
+fonts_directory: '{{ ansible_env.HOME }}/Library/Fonts'
