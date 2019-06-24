@@ -24,3 +24,17 @@
     remote_src: yes
   loop: '{{ fonts_download_urls }}'
   notify: update font cache
+
+- name: find files other than .ttf in fonts directory
+  find:
+    paths: '{{ fonts_directory }}'
+    recurse: yes
+    excludes: '*.ttf,.uuid'
+    file_type: any
+  register: fonts_directory_not_ttf_result
+
+- name: remove found non-ttf files
+  file:
+    path: '{{ item.path }}'
+    state: absent
+  loop: '{{ fonts_directory_not_ttf_result.files }}'
