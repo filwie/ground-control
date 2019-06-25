@@ -13,7 +13,6 @@
 - name: set keyboard layout
   command: "{{ item }}"
   loop:
-    - "localectl set-keymap --no-convert {{ keyboard_layout }}"
-    - "localectl set-x11-keymap --no-convert {{ keyboard_layout }}"
+    - "localectl set-keymap --no-convert {{ arch_locale_keyboard_layout }}"
+    - "localectl set-x11-keymap --no-convert {{ arch_locale_keyboard_layout }}"
   become: true
-  ignore_errors: true
