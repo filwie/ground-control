@@ -1,10 +1,4 @@
 ---
-- name: make sure dependencies are installed
-  pacman:
-    name: '{{ arch_aur_pacman_dependencies }}'
-    state: present
-  become: true
-
 - name: create separate user to build AUR packages
   user:
     name: '{{ arch_aur_builder_user }}'
@@ -29,6 +23,13 @@
   shell: 'command -v {{ arch_aur_helper }}'
   failed_when: false
   register: arch_aur_yay_command_result
+
+- name: make sure dependencies are installed
+  pacman:
+    name: '{{ arch_aur_pacman_dependencies }}'
+    state: present
+  become: true
+  when: arch_aur_yay_command_result.rc != 0
 
 - name: clone AUR helper's repository
   git:
