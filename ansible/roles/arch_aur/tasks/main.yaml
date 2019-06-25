@@ -25,6 +25,11 @@
 
 - meta: flush_handlers
 
+- name: check if AUR helper is installed
+  shell: 'command -v {{ arch_aur_helper }}'
+  failed_when: false
+  register: arch_aur_yay_command_result
+
 - name: clone AUR helper's repository
   git:
     repo: '{{ arch_aur_helper_git_repo_url }}'
@@ -32,20 +37,28 @@
   register: arch_aur_helper_clone_result
   become: true
   become_user: '{{ arch_aur_builder_user }}'
+  when: arch_aur_yay_command_result.rc != 0
 
 - name: install python dependencies
   pip:
     name: '{{ arch_aur_pip_dependencies }}'
   become: true
+  when: arch_aur_yay_command_result.rc != 0
   notify: uninstall python dependencies
 
 - name: install AUR helper using makepkg
   expect:
     command: makepkg --syncdeps --rmdeps --install
     responses:
-      (.*)Proceed with installation(.*): Y
+      (.*)Proceed with installation(.*):
+        - Y
+        - Y
+      (.*)Do you want to remove these packages?(.*): Y
     echo: true
     chdir: '{{ arch_aur_helper_git_repo_path }}'
+    timeout: 300
   become: true
   become_user: '{{ arch_aur_builder_user }}'
-  when: arch_aur_helper_clone_result is changed
+  when: arch_aur_yay_command_result.rc != 0
+  async: 300
+  poll: 10
