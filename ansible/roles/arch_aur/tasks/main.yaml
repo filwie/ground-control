@@ -61,5 +61,5 @@
   become: true
   become_user: '{{ arch_aur_builder_user }}'
   when: arch_aur_yay_command_result.rc != 0
-  async: 300
+  async: '{{ arch_aur_pacman_timeout }}'
   poll: 10

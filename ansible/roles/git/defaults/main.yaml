@@ -4,11 +4,12 @@ git_user_email: ''
 git_gitconfig_path: '{{ ansible_env.HOME }}/.gitconfig'
 git_core_excludesfile: '{{ ansible_env.HOME }}/.gitglobalignore'
 
-git_editor_env: '{{}}'
-
-git_core_editor: vim
-git_merge_tool: vimdiff
-git_diff_tool: vimdiff
-
 git_aliases:
     - aliases: '!git config -l | grep alias | cut -c 7-'
+
+git_core_editor: nvim
+git_merge_tool: nvimdiff
+git_diff_tool: nvimdiff
+git_diff_tools:
+    - name: nvimdiff
+      cmd: nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'

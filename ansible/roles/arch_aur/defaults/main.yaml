@@ -10,3 +10,5 @@ arch_aur_pacman_dependencies:
 
 arch_aur_pip_dependencies:
   - pexpect
+
+arch_aur_pacman_timeout: 300

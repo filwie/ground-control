@@ -1,4 +1,5 @@
 arch_locale_keyboard_layout: pl
 arch_locale_locale: en_US.UTF-8
+arch_locale_timezone: Europe/Warsaw
 arch_locale_pacman_dependencies:
   - libxkbcommon
