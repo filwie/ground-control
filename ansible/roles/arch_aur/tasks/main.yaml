@@ -1,0 +1,51 @@
+---
+- name: make sure dependencies are installed
+  pacman:
+    name: '{{ arch_aur_pacman_dependencies }}'
+    state: present
+  become: true
+
+- name: create separate user to build AUR packages
+  user:
+    name: '{{ arch_aur_builder_user }}'
+    group: wheel
+    create_home: true
+    state: present
+  become: true
+  when: arch_aur_builder_user is defined
+
+- name: allow AUR user to use pacman without providing password
+  lineinfile:
+    path: /etc/sudoers.d/aur_builder
+    line: 'aur_builder ALL=(ALL) NOPASSWD: /usr/bin/pacman'
+    create: yes
+    validate: 'visudo -cf %s'
+  become: true
+  notify: reset ansible connection
+
+- meta: flush_handlers
+
+- name: clone AUR helper's repository
+  git:
+    repo: '{{ arch_aur_helper_git_repo_url }}'
+    dest: '{{ arch_aur_helper_git_repo_path }}'
+  register: arch_aur_helper_clone_result
+  become: true
+  become_user: '{{ arch_aur_builder_user }}'
+
+- name: install python dependencies
+  pip:
+    name: '{{ arch_aur_pip_dependencies }}'
+  become: true
+  notify: uninstall python dependencies
+
+- name: install AUR helper using makepkg
+  expect:
+    command: makepkg --syncdeps --rmdeps --install
+    responses:
+      (.*)Proceed with installation(.*): Y
+    echo: true
+    chdir: '{{ arch_aur_helper_git_repo_path }}'
+  become: true
+  become_user: '{{ arch_aur_builder_user }}'
+  when: arch_aur_helper_clone_result is changed

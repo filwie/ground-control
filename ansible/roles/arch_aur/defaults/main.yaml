@@ -1,0 +1,11 @@
+arch_aur_helper_git_repo_url: https://aur.archlinux.org/yay.git
+arch_aur_helper_git_repo_path: /tmp/yay
+arch_aur_builder_user: aur_builder
+
+arch_aur_pacman_dependencies:
+  - git
+  - base-devel
+  - python-pip
+
+arch_aur_pip_dependencies:
+  - pexpect

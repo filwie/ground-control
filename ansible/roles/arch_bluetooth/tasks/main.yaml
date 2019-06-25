@@ -1,0 +1,18 @@
+- name: install packages
+  package:
+    name: '{{ arch_bluetooth_packages }}'
+    state: present
+  become: true
+
+- name: make sure required groups exists
+  group:
+    name: '{{ arch_bluetooth_group }}'
+    state: present
+  become: true
+
+- name: make sure user is in required groups
+  user:
+    name: '{{ ansible_user_id }}'
+    groups:
+      - '{{ arch_bluetooth_group }}'
+  become: true

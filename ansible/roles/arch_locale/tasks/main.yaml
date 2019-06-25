@@ -1,0 +1,19 @@
+---
+- name: specify locale to generate
+  lineinfile:
+    path: /etc/locale.gen
+    regexp: "^#{{ locale }}"
+    line: "{{ locale }}"
+  become: true
+
+- name: generate locale
+  command: locale-gen
+  become: true
+
+- name: set keyboard layout
+  command: "{{ item }}"
+  loop:
+    - "localectl set-keymap --no-convert {{ keyboard_layout }}"
+    - "localectl set-x11-keymap --no-convert {{ keyboard_layout }}"
+  become: true
+  ignore_errors: true

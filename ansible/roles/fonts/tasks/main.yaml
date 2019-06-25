@@ -22,8 +22,11 @@
     src: '{{ item }}'
     dest: '{{ fonts_directory }}'
     remote_src: yes
+    # TODO: tune below line
+    creates: '{{ fonts_directory }}/mononoki-Regular.ttf'
   loop: '{{ fonts_download_urls }}'
   notify: update font cache
+  register: fonts_download_result
 
 - name: find files other than .ttf in fonts directory
   find:
@@ -32,9 +35,11 @@
     excludes: '*.ttf,.uuid'
     file_type: any
   register: fonts_directory_not_ttf_result
+  when: fonts_download_result is changed
 
 - name: remove found non-ttf files
   file:
     path: '{{ item.path }}'
     state: absent
   loop: '{{ fonts_directory_not_ttf_result.files }}'
+  when: fonts_download_result is changed

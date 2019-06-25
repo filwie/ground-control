@@ -1,4 +1,9 @@
 ---
 - hosts: all
   roles:
+    - arch_locale
     - arch_reflector
+    - arch_aur
+    - arch_bluetooth
+
+
