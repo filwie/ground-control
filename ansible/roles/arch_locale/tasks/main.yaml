@@ -1,13 +1,13 @@
 ---
-- name: specify locale to generate
-  replace:
-    path: /etc/locale.gen
-    regexp: "^#{{ locale }}"
-    replace: "{{ locale }}"
-  become: true
+- name: generate specified locales
+  locale_gen:
+    name: '{{ arch_locale_locale }}'
+    state: present
 
-- name: generate locale
-  command: locale-gen
+- name: install dependencies for setting x11 keymap
+  pacman:
+    name: '{{ arch_locale_pacman_dependencies }}'
+    state: present
   become: true
 
 - name: set keyboard layout
