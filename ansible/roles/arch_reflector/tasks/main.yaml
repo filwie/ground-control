@@ -15,6 +15,8 @@
   notify: systemd daemon reload
   register: arch_reflector_service_add_result
 
+- meta: flush_handlers
+
 - name: sort mirrors for the first time
   systemd:
     name: reflector.service
