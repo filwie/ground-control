@@ -9,6 +9,12 @@ ANSIBLE_PLAYBOOK = ANSIBLE_DIRECTORY + "/provision.yaml"
 ANSIBLE_GROUP = "vagrant"
 ANSIBLE_AS_ROOT = false
 
+$script = <<-SCRIPT
+sed -i 's/^#DNS=.*$/DNS=1.1.1.1/' /etc/systemd/resolved.conf
+systemctl restart systemd-resolved
+command -v python &> /dev/null || pacman -Sy --needed --noconfirm python
+SCRIPT
+
 Vagrant.configure(VAGRANT_API_VERSION) do |config|
   config.vm.box = VAGRANT_BOX
   config.vm.hostname = VAGRANT_HOSTNAME
@@ -26,7 +32,7 @@ Vagrant.configure(VAGRANT_API_VERSION) do |config|
   end
 
   # no python equals no Ansible
-  config.vm.provision "shell", inline: "command -v python &> /dev/null || pacman -Sy --needed --noconfirm python"
+  config.vm.provision "shell", inline: $script
 
   config.vm.provision "ansible" do |ansible|
     ansible.become = ANSIBLE_AS_ROOT
