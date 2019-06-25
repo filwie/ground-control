@@ -1,9 +1,9 @@
 ---
 - name: specify locale to generate
-  lineinfile:
+  replace:
     path: /etc/locale.gen
     regexp: "^#{{ locale }}"
-    line: "{{ locale }}"
+    replace: "{{ locale }}"
   become: true
 
 - name: generate locale
