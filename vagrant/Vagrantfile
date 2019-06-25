@@ -10,9 +10,9 @@ ANSIBLE_GROUP = "vagrant"
 ANSIBLE_AS_ROOT = false
 
 $script = <<-SCRIPT
-sed -i 's/^#DNS=.*$/DNS=1.1.1.1/' /etc/systemd/resolved.conf
-systemctl restart systemd-resolved
-command -v python &> /dev/null || pacman -Sy --needed --noconfirm python
+  sed -i 's/^#DNS=.*$/DNS=1.1.1.1/' /etc/systemd/resolved.conf
+  systemctl restart systemd-resolved
+  command -v python &> /dev/null || pacman -Sy --needed --noconfirm python
 SCRIPT
 
 Vagrant.configure(VAGRANT_API_VERSION) do |config|
