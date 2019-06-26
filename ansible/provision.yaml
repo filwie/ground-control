@@ -1,9 +1,23 @@
 ---
 - hosts: all
   roles:
-    - arch_locale
-    - arch_reflector
-    - arch_aur
-    - arch_bluetooth
+    - name: fonts
+      tags: ['fonts']
+    - name: git
+      tags: ['git']
+    - name: arch_locale
+      tags: ['arch', 'locale']
+    - name: arch_reflector
+      tags: ['arch', 'reflector']
+    - name: arch_aur
+      tags: ['arch', 'aur']
+    - name: arch_bluetooth
+      tags: ['arch', 'bluetooth']
+    - name: WIP:i3wm
+      tags: ['arch', 'gui', 'i3']
+    - name: WIP:arch_network
+      tags: ['arch', 'network', 'ntp']
+    - name: x
+      tags: ['arch', 'gui', 'x']
 
 

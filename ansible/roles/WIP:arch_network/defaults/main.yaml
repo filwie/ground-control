@@ -1,0 +1,10 @@
+arch_network_ntp_servers:
+  - 0.pl.pool.ntp.org
+  - 1.pl.pool.ntp.org
+  - 2.pl.pool.ntp.org
+  - 3.pl.pool.ntp.org
+
+arch_network_dns_nameservers:
+  - 1.1.1.1
+  - 208.67.222.222
+  - 208.67.220.220

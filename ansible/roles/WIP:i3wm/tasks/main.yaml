@@ -1,0 +1,3 @@
+- name: Set OS dependent variables
+  include_vars:
+    file: '{{ ansible_distribution }}'

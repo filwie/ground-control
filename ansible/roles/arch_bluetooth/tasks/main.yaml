@@ -16,3 +16,17 @@
     groups:
       - '{{ arch_bluetooth_group }}'
   become: true
+
+- name: enable specified group to use bluetooth without superuser privileges
+  template:
+    src: 51-blueman.rules.j2
+    dest: '{{ arch_bluetooth_polkit_rules_file }}'
+  become: true
+
+- name: start and enable bluetooth service
+  systemd:
+    name: bluetooth
+    state: started
+    daemon_reload: true
+    enabled: true
+  become: true

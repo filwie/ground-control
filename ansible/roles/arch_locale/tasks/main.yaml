@@ -3,6 +3,8 @@
   locale_gen:
     name: '{{ arch_locale_locale }}'
     state: present
+  tags:
+    - locale
 
 - name: install dependencies for setting x11 keymap
   pacman:
@@ -10,9 +12,24 @@
     state: present
   become: true
 
-- name: set keyboard layout
+- name: set locale
+  command: localectl set-locale LANG={{ arch_locale_locale }}
+  become: true
+  tags:
+    - locale
+
+- name: set console and X11 keyboard layout
   command: "{{ item }}"
   loop:
-    - "localectl set-keymap --no-convert {{ arch_locale_keyboard_layout }}"
-    - "localectl set-x11-keymap --no-convert {{ arch_locale_keyboard_layout }}"
+    - 'localectl set-keymap --no-convert {{ arch_locale_keyboard_layout }}'
+    - 'localectl set-x11-keymap --no-convert {{ arch_locale_keyboard_layout }}'
   become: true
+  tags:
+    - keyboard-layout
+
+- name: set timezone
+  timezone:
+    name: '{{ arch_locale_timezone }}'
+  become: true
+  tags:
+    - timezone

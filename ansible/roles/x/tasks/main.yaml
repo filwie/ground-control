@@ -1,0 +1,10 @@
+- name: check graphics card
+  shell: lspci | grep -i --color 'vga\|3d\|2d' | cut -f 5- -d ' '
+  register: x_check_graphics_card_result
+
+- name: install Intel graphics driver
+  package:
+    name: xf86-video-intel
+    state: present
+  become: true
+  when: '"Intel" in x_check_graphics_card_result.stdout'

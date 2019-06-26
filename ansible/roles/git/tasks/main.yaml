@@ -1,20 +1,26 @@
 ---
-- name: configure git
-  block:
-    - name: install git
-      package:
-        name: git
-        state: present
-      become: '{{ true if ansible_distribution != "MacOSX" else false }}'
+- name: install git
+  package:
+    name: git
+    state: present
+  become: '{{ true if ansible_distribution != "MacOSX" else false }}'
 
-    - name: template git config
-      template:
-        src: gitconfig.j2
-        dest: '{{ git_gitconfig_path }}'
+- name: template git config
+  template:
+    src: gitconfig.j2
+    dest: '{{ git_gitconfig_path }}'
 
-    - name: put global gitignore file in place
-      copy:
-        src: gitglobalignore
-        dest: '{{ git_core_excludesfile }}'
-        backup: true
+- name: put global gitignore file in place
+  copy:
+    src: gitglobalignore
+    dest: '{{ git_core_excludesfile }}'
+    backup: true
 
+- name: make sure neovim is installed if it is set as git editor
+  package:
+    name:
+      - neovim
+      - python-neovim
+    state: present
+  become: true
+  when: git_core_editor == 'nvim'
