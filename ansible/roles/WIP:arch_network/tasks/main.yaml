@@ -1,2 +1,55 @@
 ---
-- import_tasks: systemd.yaml
+- name: template systemd services configs
+  template:
+    src: '{{ item }}.j2'
+    dest: '/etc/systemd/{{ item }}'
+  become: true
+  notify: systemd daemon reload
+  register: arch_network_service_config_result
+  loop:
+    - resolved.conf
+    - timesyncd.conf
+
+- name: start and enable services
+  systemd:
+    name: '{{ item }}'
+    state: '{{ "restarted" if arch_network_service_config_result is changed else "started" }}'
+    enabled: true
+    daemon_reload: true
+  become: true
+  loop:
+    - systemd-resolved
+    - systemd-timesyncd
+
+- name: create symbolink link to /etc/resolv.conf
+  file:
+    src: /run/systemd/resolve/stub-resolv.conf
+    dest: /etc/resolv.conf
+    force: true
+    state: link
+  become: true
+
+- name: make sure dependencies are installed
+  package:
+    name: '{{ arch_network_dependencies }}'
+    state: present
+  become: true
+
+- name: install network utilities
+  package:
+    name: '{{ arch_network_packages }}'
+    state: present
+  become: true
+
+- name: create directory for NordVPN openvpn configs
+  file:
+    path: '{{ arch_network_nordvpn_openvpn_configs_dir }}'
+    state: directory
+  become: true
+
+- name: download and unarchive NordVPN openvpn configs
+  unarchive:
+    src: '{{ arch_network_nordvpn_openvpn_configs_url }}'
+    dest: '{{ arch_network_nordvpn_openvpn_configs_dir }}'
+    remote_src: yes
+  become: true
