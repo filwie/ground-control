@@ -1,0 +1,33 @@
+- name: check graphics card
+  shell: lspci | grep -i 'vga\|3d\|2d' | cut -f 5- -d ' '
+  register: x_check_graphics_card_result
+  changed_when: false
+
+- name: install Intel graphics driver
+  package:
+    name: '{{ item.driver }}'
+    state: present
+  become: true
+  when: item.pattern in x_check_graphics_card_result.stdout
+  loop: '{{ arch_x_graphics_drivers }}'
+
+- name: install x-related packages
+  package:
+    name: '{{ arch_x_packages }}'
+    state: present
+  become: true
+
+- name: enable lightdm service
+  systemd:
+    name: lightdm
+    enabled: true
+  become: true
+  when: '"lightdm" in arch_x_packages'
+
+- name: configure displaying of fonts
+  file:
+    src: '/etc/fonts/conf.avail/{{ item }}'
+    dest: '/etc/fonts/conf.d/{{ item }}'
+    state: link
+  become: true
+  loop: '{{ arch_x_fontconfig_enable_presets }}'
