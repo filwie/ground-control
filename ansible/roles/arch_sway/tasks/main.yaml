@@ -4,8 +4,13 @@
     state: present
   become: true
 
-- name: apply default config
+- name: create config directory if it is missing
   file:
+    path: '{{ ansible_env.HOME }}/.config/sway'
+    state: directory
+
+- name: apply default config
+  copy:
     src: '{{ arch_sway_conf_default }}'
     dest: '{{ arch_sway_conf }}'
     remote_src: true
