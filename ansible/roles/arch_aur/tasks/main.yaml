@@ -48,18 +48,7 @@
   notify: uninstall python dependencies
 
 - name: install AUR helper using makepkg
-  expect:
-    command: makepkg --syncdeps --rmdeps --install
-    responses:
-      (.*)Proceed with installation(.*):
-        - Y
-        - Y
-      (.*)Do you want to remove these packages?(.*): Y
-    echo: true
-    chdir: '{{ arch_aur_helper_git_repo_path }}'
-    timeout: 300
+  command: makepkg --syncdeps --rmdeps --install --noconfirm
   become: true
   become_user: '{{ arch_aur_builder_user }}'
   when: arch_aur_yay_command_result.rc != 0
-  async: '{{ arch_aur_pacman_timeout }}'
-  poll: 10
