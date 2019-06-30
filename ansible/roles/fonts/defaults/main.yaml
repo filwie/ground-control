@@ -8,3 +8,9 @@ fonts_download_urls:
   - 'https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FantasqueSansMono.zip'
   - 'https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Iosevka.zip'
   - 'https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Mononoki.zip'
+
+fonts_fontconfig_enable_presets:
+  - 10-hinting-slight.conf
+  - 10-sub-pixel-rgb.conf
+  - 11-lcdfilter-default.conf
+  - 70-no-bitmaps.conf

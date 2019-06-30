@@ -43,3 +43,11 @@
     state: absent
   loop: '{{ fonts_directory_not_ttf_result.files }}'
   when: fonts_download_result is changed
+
+- name: configure displaying of fonts
+  file:
+    src: '/etc/fonts/conf.avail/{{ item }}'
+    dest: '/etc/fonts/conf.d/{{ item }}'
+    state: link
+  become: true
+  loop: '{{ fonts_fontconfig_enable_presets }}'

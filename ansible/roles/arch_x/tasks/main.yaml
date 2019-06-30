@@ -16,18 +16,3 @@
     name: '{{ arch_x_packages }}'
     state: present
   become: true
-
-- name: enable lightdm service
-  systemd:
-    name: lightdm
-    enabled: true
-  become: true
-  when: '"lightdm" in arch_x_packages'
-
-- name: configure displaying of fonts
-  file:
-    src: '/etc/fonts/conf.avail/{{ item }}'
-    dest: '/etc/fonts/conf.d/{{ item }}'
-    state: link
-  become: true
-  loop: '{{ arch_x_fontconfig_enable_presets }}'

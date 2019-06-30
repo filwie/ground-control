@@ -1,0 +1,8 @@
+arch_sway_packages:
+  - weston
+  - sway
+  - swayidle
+  - swaylock
+
+arch_sway_conf_default: /etc/sway/config
+arch_sway_conf: '{{ ansible_env.HOME }}/.config/sway/config'

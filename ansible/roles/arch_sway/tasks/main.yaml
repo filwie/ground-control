@@ -1,0 +1,11 @@
+- name: install packages
+  package:
+    name: '{{ arch_sway_packages }}'
+    state: present
+  become: true
+
+- name: apply default config
+  file:
+    src: '{{ arch_sway_conf_default }}'
+    dest: '{{ arch_sway_conf }}'
+    remote_src: true
