@@ -17,6 +17,7 @@ arch_network_packages:
   - networkmanager
   - networkmanager-openvpn
   - network-manager-applet
+  - gnome-keyring  # for storing WIFI passwords encrypted
 
 arch_network_nordvpn_openvpn_configs_url: https://downloads.nordcdn.com/configs/archives/servers/ovpn.zip
 arch_network_nordvpn_openvpn_configs_dir: /etc/openvpn/nordvpn
