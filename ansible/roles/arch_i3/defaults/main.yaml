@@ -1,0 +1,70 @@
+arch_i3_packages:
+  core:
+    - udiskie
+    - arandr
+    - firefox
+    - redshift
+  i3:
+    - compton
+    - i3-gaps
+    - rofi
+  theming:
+    - lxappearance
+    -
+  sound:
+    - pulseaudio
+    - playerctl
+  pictures:
+    - imagemagick
+    - pinta
+    - gpick
+    - darktable
+    - simplescreenrecorder
+  books:
+    - calibre
+  office:
+    - libreoffice-fresh
+  xfce:
+    - xfce4-pulseaudio-plugin
+    - xfce4-screenshooter
+    - xfce4-notifyd
+  terminal:
+    - kitty  # actual emulator
+    - git
+    - tmux
+    - rsync
+    - ranger
+    - tree
+    - unzip
+    - highlight
+    - fzf
+    - ripgrep
+  monitoring:
+    - htop
+    - iotop
+    - ifto
+  programming:
+    - python
+    - python-pip
+    - go
+    - ctags
+    - shellcheck
+    - ansible-lint
+  laptop:
+    - mate-power-manager
+
+arch_i3_pip_packages:
+  code_style:
+    - autopep8
+    - flake8
+    - pylint
+    - vim-vint
+    - gitlint
+  basic_libraries:
+    - colr
+    - requests
+  utilities:
+    - grip
+    - IPython
+    - pytest
+
