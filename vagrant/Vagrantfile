@@ -17,11 +17,11 @@ $script = <<-SCRIPT
   sed -i 's/^#DNS=.*$/DNS=1.1.1.1/' /etc/systemd/resolved.conf
   systemctl restart systemd-resolved
   echo 'Server = https://ftp.icm.edu.pl/pub/Linux/dist/archlinux/$repo/os/$arch' > /etc/pacman.d/mirrorlist
-  [ -f /morszczczuk ] || {
+  [[ -f /indicator ]] || {
     rm -rf /etc/pacman.d/gnupg
     pacman-key --init
     pacman-key --populate archlinux
-  } && touch /morszczuk
+  } && echo kek > /indicator
   command -v python &> /dev/null || pacman -Sy --needed --noconfirm python
 SCRIPT
 
@@ -60,5 +60,6 @@ Vagrant.configure(VAGRANT_API_VERSION) do |config|
     ansible.groups = { "arch" => [VAGRANT_HOSTNAME] }
     ansible.playbook = ANSIBLE_PLAYBOOK
     ansible.verbose = true
+    ansible.skip_tags = "kvm"
   end
 end
