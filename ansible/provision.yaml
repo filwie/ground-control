@@ -6,5 +6,5 @@
     - { name: arch_locale, tags: ['arch', 'locale'] }
     - { name: arch_network, tags: ['arch', 'network'] }
     - { name: arch_reflector, tags: ['arch', 'reflector'] }
-    - { name: arch_sway, tags: ['arch', 'gui'] }
+    - { name: arch_virtualization, tags: ['arch', 'virtualization', 'kvm', 'docker'] }
     - { name: git, tags: ['git'] }
