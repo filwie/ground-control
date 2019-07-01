@@ -1,0 +1,15 @@
+  - name: include virtualization tasks
+    include_tasks:
+      file: packages_services.yaml
+      apply:
+        tags:
+          - '{{ item }}'
+        vars:
+          arch_virtualization_provider: '{{ item }}'
+    loop:
+      - docker
+      - kvm
+    tags:
+      - virtualiztion
+      - docker
+      - kvm

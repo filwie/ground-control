@@ -1,0 +1,14 @@
+arch_virtualization_packages:
+  docker:
+    - docker
+    - docker-compose
+  kvm:
+    - qemu
+    - libvirt
+    - vagrant
+
+arch_virtualization_services:
+  docker:
+    - docker
+  kvm:
+    - libvirtd
