@@ -16,3 +16,7 @@
     name: '{{ arch_x_packages }}'
     state: present
   become: true
+
+- name: set X11 keyboard layout
+  command: localectl set-x11-keymap --no-convert {{ arch_x_keyboard_layout }}
+  become: true

@@ -3,7 +3,11 @@ arch_x_graphics_drivers:
     driver: xf86-video-intel
 
 arch_x_packages:
-  - xf86-input-libinput
-  - lightdm
-  - light-locker
-  - lightdm-webkit2-greeter
+  - xorg-server
+  - xorg-xbacklight
+  - xorg-xinit
+  - xf86-input-evdev
+  - libxkbcommon
+  - xautolock
+
+arch_x_keyboard_layout: pl
