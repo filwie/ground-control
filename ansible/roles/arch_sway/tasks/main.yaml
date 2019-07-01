@@ -1,16 +1,15 @@
 - name: install packages
   package:
-    name: '{{ arch_sway_packages }}'
+    name: '{{ arch_sway_packages.values() | flatten }}'
     state: present
   become: true
 
-- name: create config directory if it is missing
+- name: create config directory if it doesn't exist
   file:
     path: '{{ ansible_env.HOME }}/.config/sway'
     state: directory
 
-- name: apply default config
-  copy:
-    src: '{{ arch_sway_conf_default }}'
+- name: template sway config
+  template:
+    src: sway.conf.j2
     dest: '{{ arch_sway_conf }}'
-    remote_src: true

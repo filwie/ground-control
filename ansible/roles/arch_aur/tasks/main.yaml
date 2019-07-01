@@ -49,6 +49,8 @@
 
 - name: install AUR helper using makepkg
   command: makepkg --syncdeps --rmdeps --install --noconfirm
+  args:
+    chdir: '{{ arch_aur_helper_git_repo_path }}'
   become: true
   become_user: '{{ arch_aur_builder_user }}'
   when: arch_aur_yay_command_result.rc != 0
