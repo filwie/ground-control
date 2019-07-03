@@ -23,6 +23,7 @@
   shell: 'command -v {{ arch_aur_helper }}'
   failed_when: false
   register: arch_aur_yay_command_result
+  changed_when: false
 
 - name: make sure dependencies are installed
   pacman:

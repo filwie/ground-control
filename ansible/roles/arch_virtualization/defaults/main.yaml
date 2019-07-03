@@ -1,3 +1,5 @@
+arch_enabled_virtualization_providers: []
+
 arch_virtualization_packages:
   docker:
     - docker
@@ -12,3 +14,9 @@ arch_virtualization_services:
     - docker
   kvm:
     - libvirtd
+
+arch_virtualization_groups:
+  docker:
+    - docker
+  kvm:
+    - libvirt

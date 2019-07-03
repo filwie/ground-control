@@ -36,6 +36,7 @@ Vagrant.configure(VAGRANT_API_VERSION) do |config|
     vbox.cpus = CPUS
     vbox.customize ["modifyvm", :id, "--vram", VRAM]
     vbox.customize ["modifyvm", :id, "--accelerate3d", "on"]
+    vb.customize ['modifyvm', :id, '--clipboard', 'bidirectional']
   end
 
   config.vm.provider :libvirt do |domain|

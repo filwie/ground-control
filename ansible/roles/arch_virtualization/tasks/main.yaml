@@ -1,15 +1,21 @@
-  - name: include virtualization tasks
-    include_tasks:
-      file: packages_services.yaml
-      apply:
-        tags:
-          - '{{ item }}'
-        vars:
-          arch_virtualization_provider: '{{ item }}'
-    loop:
-      - docker
-      - kvm
-    tags:
-      - virtualiztion
-      - docker
-      - kvm
+- name: enable Docker virtualization
+  set_fact:
+    arch_enabled_virtualization_providers: '{{ arch_enabled_virtualization_providers + ["docker"] }}'
+  tags:
+    - docker
+
+- name: enable KVM virtualization
+  set_fact:
+    arch_enabled_virtualization_providers: '{{ arch_enabled_virtualization_providers + ["kvm"] }}'
+  tags:
+    - kvm
+
+- name: include virtualization tasks
+  include_tasks:
+    file: provider.yaml
+    apply:
+      tags:
+        - '{{ item }}'
+      vars:
+        arch_virtualization_provider: '{{ item }}'
+  loop: '{{ arch_enabled_virtualization_providers }}'

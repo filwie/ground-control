@@ -17,6 +17,12 @@
     state: present
   become: true
 
+- name: check currently set x11 keyboard layout
+  shell: localectl | grep 'X11 Layout' | awk '{print $3}'
+  register: arch_x_kb_result
+  changed_when: false
+
 - name: set X11 keyboard layout
   command: localectl set-x11-keymap --no-convert {{ arch_x_keyboard_layout }}
   become: true
+  when: arch_x_kb_result.stdout != arch_x_keyboard_layout

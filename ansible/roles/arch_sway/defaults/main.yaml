@@ -5,6 +5,7 @@ arch_sway_packages:
     - sway
     - swayidle
     - swaylock
+    - bemenu
   core:
     - firefox
     - kitty

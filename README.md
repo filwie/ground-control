@@ -11,6 +11,8 @@
     - [arch_reflector](#archreflector)
     - [fonts](#fonts)
     - [git](#git)
+  - [Issues](#Issues)
+    - [Meta tasks as handlers](#Meta-tasks-as-handlers)
 
 ## Roles
 
@@ -55,7 +57,7 @@ Reference:
 - Makes sure `libxkbcommon` package is installed (for setting x11 keymap)
 - Sets locale and keymap using `localectl`
 - Sets timezone
-  
+
 Defaults:
 
 - locale `en_US.UTF-8`
@@ -85,7 +87,7 @@ Reference:
 - Downloads and unarchives fonts
 - Refreshes font cache
 - Cleans up non-truetype fonts files
-  
+
 Defaults:
 
 - Fonts: `Iosevka`, `Mononoki`, `Fantasque` and `Noto`
@@ -113,3 +115,14 @@ Defaults:
 
 - `nvim` as core editor, diff and merge tools
 - global gitignore path `~/.gitglobalignore`
+
+## Issues
+
+### Meta tasks as handlers
+
+Currently (as of Jul 3rd 2019) Ansible's meta tasks cannot be used as handlers, so
+I added `ignore_errors` to them. As soon as [this](https://github.com/ansible/ansible/issues/50306)
+is implemented, that line can be deleted.
+
+In case of below roles it is used primarely to reset SSH connection and allow new
+groups to be applied to the user.
