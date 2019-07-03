@@ -36,18 +36,18 @@ Vagrant.configure(VAGRANT_API_VERSION) do |config|
     vbox.cpus = CPUS
     vbox.customize ["modifyvm", :id, "--vram", VRAM]
     vbox.customize ["modifyvm", :id, "--accelerate3d", "on"]
-    vb.customize ['modifyvm', :id, '--clipboard', 'bidirectional']
+    vbox.customize ['modifyvm', :id, '--clipboard', 'bidirectional']
   end
 
-  config.vm.provider :libvirt do |domain|
-    domain.driver = "kvm"
-    domain.memory = MEMORY
-    domain.cpus = CPUS
-    domain.video_type = "vga"
-    domain.video_vram = VRAM * 1024
-    domain.connect_via_ssh = false
-    domain.management_network_name = "vagrant"
-    domain.management_network_address = "10.10.10.0/24"
+  config.vm.provider :libvirt do |lvirt|
+    lvirt.driver = "kvm"
+    lvirt.memory = MEMORY
+    lvirt.cpus = CPUS
+    lvirt.video_type = "vga"
+    lvirt.video_vram = VRAM * 1024
+    lvirt.connect_via_ssh = false
+    lvirt.management_network_name = "vagrant"
+    lvirt.management_network_address = "10.10.10.0/24"
   end
 
   # no python equals no Ansible
