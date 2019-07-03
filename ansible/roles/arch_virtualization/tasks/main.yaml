@@ -15,7 +15,9 @@
     file: provider.yaml
     apply:
       tags:
-        - '{{ item }}'
+        - '{{ provider }}'
       vars:
-        arch_virtualization_provider: '{{ item }}'
+        arch_virtualization_provider: '{{ provider }}'
   loop: '{{ arch_enabled_virtualization_providers }}'
+  loop_control:
+    loop_var: provider
