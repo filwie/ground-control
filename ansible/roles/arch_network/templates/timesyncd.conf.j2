@@ -12,7 +12,7 @@
 # See timesyncd.conf(5) for details.
 
 [Time]
-NTP={{ arch_network_ntp_servers[0] }} 
+NTP={{ arch_network_ntp_servers[0] }}
 FallbackNTP={{ arch_network_ntp_servers[1:] | join(' ')}}
 RootDistanceMaxSec=5
 PollIntervalMinSec=32

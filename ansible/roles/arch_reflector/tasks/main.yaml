@@ -32,4 +32,4 @@
     enabled: yes
   become: true
   notify: systemd daemon reload
-  when: arch_reflector_enable_timer
+  when: arch_reflector_enable_timer | bool

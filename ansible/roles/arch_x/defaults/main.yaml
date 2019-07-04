@@ -1,6 +1,12 @@
 arch_x_graphics_drivers:
   - pattern: Intel
     driver: xf86-video-intel
+  - pattern: ''
+    driver: mesa
+
+arch_x_intel_conf:
+  Identifier: Intel Graphics
+  Driver: Intel
 
 arch_x_packages:
   - xorg-server

@@ -11,6 +11,13 @@
   when: item.pattern in x_check_graphics_card_result.stdout
   loop: '{{ arch_x_graphics_drivers }}'
 
+- name: specify driver for Intel graphics card
+  template:
+    src: 20-intel.conf.j2
+    dest: /etc/X11/xorg.conf.d/20-intel.conf
+  become: true
+#  when: '"Intel" in x_check_graphics_card_result.stdout'
+
 - name: install x-related packages
   package:
     name: '{{ arch_x_packages }}'

@@ -1,0 +1,5 @@
+Section "Device"
+{% for k, v in arch_x_intel_conf.items() %}
+    {{ k }} "{{ v }}"
+{% endfor %}
+EndSection

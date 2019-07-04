@@ -5,7 +5,6 @@
     - { name: arch_reflector, tags: ['arch', 'reflector'] }
     - { name: arch_network, tags: ['arch', 'network'] }
 
-    - { name: git, tags: ['git'] }
     - { name: arch_aur, tags: ['arch', 'aur'] }
     - { name: arch_bluetooth, tags: ['arch', 'bluetooth'] }
 

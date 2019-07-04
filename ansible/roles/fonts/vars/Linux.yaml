@@ -1,2 +1,3 @@
 fonts_become_to_install_packages: true
-fonts_directory: "{{ ansible_env.HOME }}/.local/share/fonts"
+xdg_data_home: '{{ ansible_env.XDG_DATA_HOME | default(ansible_env.HOME + "/.local/share") }}'
+fonts_directory: '{{ xdg_data_home }}/fonts'

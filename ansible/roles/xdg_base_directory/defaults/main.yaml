@@ -1,0 +1,99 @@
+---
+# https://wiki.archlinux.org/index.php/XDG_Base_Directory
+
+xdg_base_directory_global: true
+
+xdg_base_directory_spec:
+  config_home:
+    var: XDG_CONFIG_HOME
+    val: '$HOME/.config'
+    path: '{{ ansible_env.HOME}}/.config'
+  data_home:
+    var: XDG_DATA_HOME
+    val: '$HOME/.local/share'
+    path: '{{ ansible_env.HOME}}/.local/share'
+  cache_home:
+    var: XDG_CACHE_HOME
+    val: '$HOME/.cache'
+    path: '{{ ansible_env.HOME}}/.cache'
+
+xdg_base_directory_environment:
+  BASH_COMPLETION_USER_FILE: '$XDG_CONFIG_HOME/bash-completion/bash_completion'
+
+  CARGO_HOME: '$XDG_DATA_HOME/cargo'
+  RUSTUP_HOME: '$XDG_DATA_HOME/rustup'
+
+  JUPYTER_CONFIG_DIR: '$XDG_CONFIG_HOME/jupyter'
+  IPYTHONDIR: '$XDG_CONFIG_HOME/ipython'
+  PYTHON_EGG_CACHE: '$XDG_CACHE_HOME/python-eggs'
+
+  NODE_REPL_HISTORY: '$XDG_DATA_HOME/node_repl_history'
+  NPM_CONFIG_USERCONFIG: '$XDG_CONFIG_HOME/npm/npmrc'
+
+  MYSQL_HISTFILE: '$XDG_DATA_HOME/mysql_history'
+
+  _JAVA_OPTIONS: '-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java'
+
+  DOCKER_CONFIG: '$XDG_CONFIG_HOME/docker'
+  MACHINE_STORAGE_PATH: '$XDG_DATA_HOME/docker-machine'
+
+  GTK_RC_FILES: '$XDG_CONFIG_HOME/gtk-1.0/gtkrc'
+  GTK2_RC_FILES: '$XDG_CONFIG_HOME/gtk-2.0/gtkrc'
+
+  TERMINFO: '$XDG_DATA_HOME/terminfo'
+  TERMINFO_DIRS: '$XDG_DATA_HOME/terminfo:/usr/share/terminfo'
+
+  # XINITRC: '$XDG_CONFIG_HOME/X11/xinitrc'
+  # XSERVERRC: '$XDG_CONFIG_HOME/X11/xserverrc'
+
+  XCOMPOSEFILE: '$XDG_CONFIG_HOME/X11/xcompose'
+  XCOMPOSECACHE: '$XDG_CACHE_HOME/X11/xcompose'
+
+  GNUPGHOME: '$XDG_DATA_HOME/gnupg'
+
+  TMUX_TMPDIR: '$XDG_RUNTIME_DIR'
+
+  WINEPREFIX: '$XDG_DATA_HOME/wineprefixes/defaul'  # MUST BE CREATED
+
+  VAGRANT_HOME: '$XDG_DATA_HOME/vagrant'
+  VAGRANT_ALIAS_FILE: '$XDG_DATA_HOME/vagrant/aliases'
+
+xdg_base_directory_blocks_user:
+  - path: '{{ "/etc/zsh/zshenv" if global | bool else ansible_env.HOME + "/.zshenv" }}'
+    block: |
+      {% for item in xdg_base_directory_spec.values() -%}
+        export {{ item.var }}="{{ item.val }}"
+      {% endfor %}
+
+      ZDOTDIR="${XDG_CONFIG_HOME:$HOME/.config}/zsh"
+
+      {% for var, val in xdg_base_directory_environment.items() -%}
+        export {{ var }}="{{ val }}"
+      {% endfor %}
+
+  - path: '{{ "/etc/profile" if global | bool else ansible_env.HOME + "/.profile" }}'
+    block: |
+      {% for item in xdg_base_directory_spec.values() -%}
+        export {{ item.var }}="{{ item.val }}"
+      {% endfor %}
+
+      {% for var, var in xdg_base_directory_environment.items() -%}
+        export {{ var }}="{{ val }}"
+      {% endfor %}
+
+  - path: '{{ "/etc/fish/config.fish" if global | bool else ansible_env.HOME + "/.config/fish/config.fish" }}'
+    block: |
+      {% for item in xdg_base_directory_spec.values() -%}
+      {% endfor %}
+
+  - path: '{{ xdg_base_directory_spec.config_home.path }}/npm/npmrc'
+    block: |
+      prefix=${XDG_DATA_HOME}/npm
+      cache=${XDG_CACHE_HOME}/npm
+      tmp=${XDG_RUNTIME_DIR}/npm
+      init-module=${XDG_CONFIG_HOME}/npm/config/npm-init.js
+
+
+# GOROOT=//usr/local/go
+# GOPATH="$XDG_DATA_HOME/go"
+# PATH=$PATH:$GOROOT/bin
