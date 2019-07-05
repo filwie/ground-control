@@ -17,8 +17,20 @@ xdg_base_directory_spec:
     val: '$HOME/.cache'
     path: '{{ ansible_env.HOME}}/.cache'
 
+xdg_base_directory_user_dirs:
+  download: 'downloads'
+  music: 'music'
+  pictures: 'pictures'
+  desktop: ''
+  documents: 'documents'
+  videos: 'videos'
+  templates: ''
+  public: ''
+
 xdg_base_directory_environment:
   BASH_COMPLETION_USER_FILE: '$XDG_CONFIG_HOME/bash-completion/bash_completion'
+
+  LESSHISTFILE: '$XDG_DATA_HOME/lesshst'
 
   CARGO_HOME: '$XDG_DATA_HOME/cargo'
   RUSTUP_HOME: '$XDG_DATA_HOME/rustup'
@@ -43,9 +55,6 @@ xdg_base_directory_environment:
   TERMINFO: '$XDG_DATA_HOME/terminfo'
   TERMINFO_DIRS: '$XDG_DATA_HOME/terminfo:/usr/share/terminfo'
 
-  # XINITRC: '$XDG_CONFIG_HOME/X11/xinitrc'
-  # XSERVERRC: '$XDG_CONFIG_HOME/X11/xserverrc'
-
   XCOMPOSEFILE: '$XDG_CONFIG_HOME/X11/xcompose'
   XCOMPOSECACHE: '$XDG_CACHE_HOME/X11/xcompose'
 
@@ -58,32 +67,37 @@ xdg_base_directory_environment:
   VAGRANT_HOME: '$XDG_DATA_HOME/vagrant'
   VAGRANT_ALIAS_FILE: '$XDG_DATA_HOME/vagrant/aliases'
 
-xdg_base_directory_blocks_user:
-  - path: '{{ "/etc/zsh/zshenv" if global | bool else ansible_env.HOME + "/.zshenv" }}'
+xdg_base_directory_shell_files_blocks:
+  - path: '{{ "/etc/zsh/zshenv" if xdg_base_directory_global | bool else ansible_env.HOME + "/.zshenv" }}'
     block: |
-      {% for item in xdg_base_directory_spec.values() -%}
+      {% for item in xdg_base_directory_spec.values() | list -%}
         export {{ item.var }}="{{ item.val }}"
       {% endfor %}
 
-      ZDOTDIR="${XDG_CONFIG_HOME:$HOME/.config}/zsh"
+      ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
       {% for var, val in xdg_base_directory_environment.items() -%}
         export {{ var }}="{{ val }}"
       {% endfor %}
 
-  - path: '{{ "/etc/profile" if global | bool else ansible_env.HOME + "/.profile" }}'
+  - path: '{{ "/etc/profile" if xdg_base_directory_global | bool else ansible_env.HOME + "/.profile" }}'
     block: |
-      {% for item in xdg_base_directory_spec.values() -%}
+      {% for item in xdg_base_directory_spec.values() | list -%}
         export {{ item.var }}="{{ item.val }}"
       {% endfor %}
 
-      {% for var, var in xdg_base_directory_environment.items() -%}
+      {% for var, val in xdg_base_directory_environment.items() -%}
         export {{ var }}="{{ val }}"
       {% endfor %}
 
-  - path: '{{ "/etc/fish/config.fish" if global | bool else ansible_env.HOME + "/.config/fish/config.fish" }}'
+  - path: '{{ "/etc/fish/conf.d/xdg.fish" if xdg_base_directory_global | bool else ansible_env.HOME + "/.config/fish/config.fish" }}'
     block: |
-      {% for item in xdg_base_directory_spec.values() -%}
+      {% for item in xdg_base_directory_spec.values() | list -%}
+        set -x {{ item.var }} "{{ item.val }}"
+      {% endfor %}
+
+      {% for var, val in xdg_base_directory_environment.items() -%}
+        set -x {{ var }} "{{ val }}"
       {% endfor %}
 
   - path: '{{ xdg_base_directory_spec.config_home.path }}/npm/npmrc'
@@ -96,4 +110,3 @@ xdg_base_directory_blocks_user:
 
 # GOROOT=//usr/local/go
 # GOPATH="$XDG_DATA_HOME/go"
-# PATH=$PATH:$GOROOT/bin

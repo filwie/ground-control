@@ -1,0 +1,15 @@
+set $mod            "{{ arch_i3_mod }}"
+set $term           "{{ arch_i3_term }}"
+set $launcher_cmd   "{{ arch_i3_launcher }}"
+set $window_toggler "{{ arch_i3_window_toggler }}"
+set $browser        "{{ arch_i3_browser }}"
+set $lock_command   "{{ arch_i3_lock_cmd }}"
+set $bar_command    "{{ arch_i3_bar_cmd }}"
+
+
+{% if arch_i3_gaps.enabled -%}
+gaps inner {{ arch_i3_gaps.inner }}
+gaps outer {{ arch_i3_gaps.outer }}
+{% endif %}
+
+{% include 'templates/config-keymap.j2' %}

@@ -1,0 +1,6 @@
+---
+
+- name: template i3 config
+  template:
+    src: config.j2
+    dest: '{{ ansible_env.XDG_CONFIG_HOME | default(ansible_env.HOME + "/.config") }}/i3/config'

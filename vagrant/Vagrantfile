@@ -17,11 +17,11 @@ $script = <<-SCRIPT
   sed -i 's/^#DNS=.*$/DNS=1.1.1.1/' /etc/systemd/resolved.conf
   systemctl restart systemd-resolved
   echo 'Server = https://ftp.icm.edu.pl/pub/Linux/dist/archlinux/$repo/os/$arch' > /etc/pacman.d/mirrorlist
-  [[ -f /indicator ]] || {
+  [[ -f /gpg_recreate_timestamp ]] || {
     rm -rf /etc/pacman.d/gnupg
     pacman-key --init
     pacman-key --populate archlinux
-  } && echo kek > /indicator
+  } && echo "$(date)" > /gpg_recreate_timestamp
   command -v python &> /dev/null || pacman -Sy --needed --noconfirm python
 SCRIPT
 

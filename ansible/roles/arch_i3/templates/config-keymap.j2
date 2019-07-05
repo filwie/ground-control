@@ -1,0 +1,93 @@
+# keyboard mapping {{ "{{{" }}
+## run programs {{ "{{{" }}
+bindsym $mod+Return    exec --no-startup-id $term
+bindsym $mod+d         exec --no-startup-id $launcher_cmd
+bindsym $mod+Ctrl+l    exec --no-startup-id $lock_command
+bindsym $mod+Tab       exec --no-startup-id $window_toggler
+bindsym $mod+w         exec --no-startup-id $browser
+## /run programs {{ "}}}" }}
+
+## reload/restart in place {{ "{{{" }}
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+## /reload/restart in place {{ "}}}" }}
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+## change focus {{ "{{{" }}
+bindsym $mod+h     focus left
+bindsym $mod+j     focus down
+bindsym $mod+k     focus up
+bindsym $mod+l     focus right
+bindsym $mod+Left  focus left
+bindsym $mod+Down  focus down
+bindsym $mod+Up    focus up
+bindsym $mod+Right focus right
+## {{ "}}}" }}
+
+## move focused window {{ "{{{" }}
+bindsym $mod+Shift+h        move left
+bindsym $mod+Shift+j        move down
+bindsym $mod+Shift+k        move up
+bindsym $mod+Shift+l        move right
+bindsym $mod+Shift+Left     move left
+bindsym $mod+Shift+Down     move down
+bindsym $mod+Shift+Up       move up
+bindsym $mod+Shift+Right    move right
+## /move focused window {{ "}}}" }}
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+Shift+s layout stacking
+bindsym $mod+Shift+w layout tabbed
+bindsym $mod+Shift+e layout toggle split
+
+# split container
+bindsym $mod+e split h
+bindsym $mod+o split v
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus child/parent container
+bindsym $mod+p focus parent
+bindsym $mod+c focus child
+
+## switch/move to workspace {{ "{{{" }}
+{% for n in range(10) %}
+ bindsym $mod+{{ n }}       workspace {{ n }}
+ bindsym $mod+Shift+{{ n }} move container to workspace {{ n }}
+{% endfor %}
+## /switch/move to workspace {{ "}}}" }}
+
+# Move floating container to the center of all outputs
+bindsym $mod+c move absolute position center
+
+# Move container to the current position of the cursor
+bindsym $mod+m move position mouse
+
+## resize mode {{ "{{{" }}
+bindsym $mod+r mode "resize"
+mode "resize" {
+        bindsym h       resize shrink width   {{ arch_i3_resize_by_px }} px or {{ arch_i3_resize_by_px }} ppt
+        bindsym j       resize grow height    {{ arch_i3_resize_by_px }} px or {{ arch_i3_resize_by_px }} ppt
+        bindsym k       resize shrink height  {{ arch_i3_resize_by_px }} px or {{ arch_i3_resize_by_px }} ppt
+        bindsym l       resize grow width     {{ arch_i3_resize_by_px }} px or {{ arch_i3_resize_by_px }} ppt
+        bindsym Left    resize shrink width   {{ arch_i3_resize_by_px }} px or {{ arch_i3_resize_by_px }} ppt
+        bindsym Down    resize grow height    {{ arch_i3_resize_by_px }} px or {{ arch_i3_resize_by_px }} ppt
+        bindsym Up      resize shrink height  {{ arch_i3_resize_by_px }} px or {{ arch_i3_resize_by_px }} ppt
+        bindsym Right   resize grow width     {{ arch_i3_resize_by_px }} px or {{ arch_i3_resize_by_px }} ppt
+        bindsym Return  mode "default"
+        bindsym Escape  mode "default"
+}
+## /resize mode {{ "}}}" }}
+# /keyboard mappings {{ "}}}" }}

@@ -1,0 +1,24 @@
+arch_dev_packages:
+  programming:
+    - ansible-lint
+    - ctags
+    - go
+    - python
+    - python-pip
+    - shellcheck
+
+arch_i3_pip_packages:
+  code_style:
+    - autopep8
+    - flake8
+    - pylint
+    - vim-vint
+    - gitlint
+  basic_libraries:
+    - colr
+    - requests
+  utilities:
+    - grip
+    - IPython
+    - pytest
+

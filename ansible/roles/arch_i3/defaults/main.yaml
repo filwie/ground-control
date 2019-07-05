@@ -1,70 +1,71 @@
+arch_i3_gaps:
+  enabled: true
+  inner: 5
+  outer: 5
+
+arch_i3_mod: Mod1
+arch_i3_term: alacritty
+arch_i3_launcher: rofi
+arch_i3_launcher_cmd: rofi -show drun -modi drun,run,window,ssh -show-icons -sidebar-mode -lines 8 -terminal {{ arch_i3_term }}
+arch_i3_lock_cmd: ''
+arch_i3_bar_cmd: ''
+arch_i3_window_toggler: rofi -show window -show-icons
+
+arch_i3_browser: firefox
+
+arch_i3_resize_by_px: 1
+
+arch_i3_autostart:
+  - ''
+
+arch_i3_autostart_always:
+  - ''
+
 arch_i3_packages:
   core:
-    - udiskie
-    - arandr
-    - firefox
+    - '{{ arch_i3_browser }}'
+    - arandip
     - redshift
+    - udiskie
   i3:
     - compton
     - i3-gaps
     - rofi
   theming:
     - lxappearance
-    -
   sound:
-    - pulseaudio
     - playerctl
+    - pulseaudio
   pictures:
+    - darktable
+    - gpick
     - imagemagick
     - pinta
-    - gpick
-    - darktable
     - simplescreenrecorder
   books:
     - calibre
   office:
     - libreoffice-fresh
   xfce:
+    - xfce4-clipman
+    - xfce4-notifyd
     - xfce4-pulseaudio-plugin
     - xfce4-screenshooter
-    - xfce4-notifyd
   terminal:
-    - kitty  # actual emulator
+    - '{{ arch_i3_config.term }}'  # actual emulator
+    - fzf
     - git
-    - tmux
-    - rsync
+    - highlight
     - ranger
+    - ripgrep
+    - rsync
+    - tmux
     - tree
     - unzip
-    - highlight
-    - fzf
-    - ripgrep
+    - xclip
   monitoring:
     - htop
+    - iftop
     - iotop
-    - ifto
-  programming:
-    - python
-    - python-pip
-    - go
-    - ctags
-    - shellcheck
-    - ansible-lint
   laptop:
     - mate-power-manager
-
-arch_i3_pip_packages:
-  code_style:
-    - autopep8
-    - flake8
-    - pylint
-    - vim-vint
-    - gitlint
-  basic_libraries:
-    - colr
-    - requests
-  utilities:
-    - grip
-    - IPython
-    - pytest
-

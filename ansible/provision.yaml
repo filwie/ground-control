@@ -8,5 +8,7 @@
     - { name: arch_aur, tags: ['arch', 'aur'] }
     - { name: arch_bluetooth, tags: ['arch', 'bluetooth'] }
 
+    - { name: xdg_base_directory, tags: ['xdg'] }
+
     - { name: arch_i3, tags: ['arch', 'i3', 'gui'] }
     - { name: arch_virtualization, tags: ['arch', 'virtualization'] }
