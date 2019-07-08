@@ -1,3 +1,5 @@
+arch_i3_config_dir: '{{ ansible_env.XDG_CONFIG_HOME | default(ansible_env.HOME + "/.config") }}/i3'
+
 arch_i3_gaps:
   enabled: true
   inner: 5
@@ -24,7 +26,7 @@ arch_i3_autostart_always:
 arch_i3_packages:
   core:
     - '{{ arch_i3_browser }}'
-    - arandip
+    - arandr
     - redshift
     - udiskie
   i3:
@@ -47,12 +49,12 @@ arch_i3_packages:
   office:
     - libreoffice-fresh
   xfce:
-    - xfce4-clipman
+    - xfce4-clipman-plugin
     - xfce4-notifyd
     - xfce4-pulseaudio-plugin
     - xfce4-screenshooter
   terminal:
-    - '{{ arch_i3_config.term }}'  # actual emulator
+    - '{{ arch_i3_term }}'  # actual emulator
     - fzf
     - git
     - highlight

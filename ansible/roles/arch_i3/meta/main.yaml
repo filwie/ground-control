@@ -2,4 +2,5 @@
 dependencies:
   - role: fonts
   - role: arch_x
+  - role: lightdm
   - role: xdg_base_directory

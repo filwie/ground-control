@@ -1,6 +1,16 @@
 ---
+- name: install packages
+  package:
+    name: '{{ arch_i3_packages.values() | flatten }}'
+    state: present
+  become: true
+
+- name: create directory for i3 config
+  file:
+    path: '{{ arch_i3_config_dir }}'
+    state: directory
 
 - name: template i3 config
   template:
     src: config.j2
-    dest: '{{ ansible_env.XDG_CONFIG_HOME | default(ansible_env.HOME + "/.config") }}/i3/config'
+    dest: '{{ arch_i3_config_dir }}/config'
