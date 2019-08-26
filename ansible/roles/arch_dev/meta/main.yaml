@@ -1,6 +1,0 @@
----
-dependencies:
-  - role: git
-  - role: terminal
-  - role: vscode
-  - role: nvim
