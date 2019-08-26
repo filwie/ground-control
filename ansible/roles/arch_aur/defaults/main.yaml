@@ -7,6 +7,3 @@ arch_aur_pacman_dependencies:
   - git
   - base-devel
   - python-pip
-
-arch_aur_pip_dependencies:
-  - pexpect
