@@ -1,14 +1,19 @@
 ---
 - hosts: all
   roles:
-    - { name: arch_locale, tags: ['arch', 'locale'] }
-    - { name: arch_reflector, tags: ['arch', 'reflector'] }
-    - { name: arch_network, tags: ['arch', 'network'] }
-
-    - { name: arch_aur, tags: ['arch', 'aur'] }
-    - { name: arch_bluetooth, tags: ['arch', 'bluetooth'] }
-
-    - { name: xdg_base_directory, tags: ['xdg'] }
-
-    - { name: arch_i3, tags: ['arch', 'i3', 'gui'] }
-    - { name: arch_virtualization, tags: ['arch', 'virtualization'] }
+    - name: arch_locale
+      tags: [arch, locale]
+    - name: arch_reflector
+      tags: [arch, reflector]
+    - name: arch_network
+      tags: [arch, network]
+    - name: arch_aur
+      tags: [arch, aur]
+    - name: arch_bluetooth
+      tags: [arch, bluetooth]
+    - name: xdg_base_directory
+      tags: [xdg]
+    - name: arch_i3
+      tags: [arch, i3, gui]
+    - name: arch_virtualization
+      tags: [arch, virtualization]
