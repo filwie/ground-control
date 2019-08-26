@@ -15,5 +15,7 @@
       tags: [xdg]
     - name: arch_i3
       tags: [arch, i3, gui]
+    - name: terminal
+      tags: terminal
     - name: arch_virtualization
       tags: [arch, virtualization]
