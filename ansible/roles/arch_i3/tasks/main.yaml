@@ -4,13 +4,3 @@
     name: '{{ arch_i3_packages.values() | flatten }}'
     state: present
   become: true
-
-- name: create directory for i3 config
-  file:
-    path: '{{ arch_i3_config_dir }}'
-    state: directory
-
-- name: template i3 config
-  template:
-    src: config.j2
-    dest: '{{ arch_i3_config_dir }}/config'

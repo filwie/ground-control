@@ -1,31 +1,7 @@
-arch_i3_config_dir: '{{ ansible_env.XDG_CONFIG_HOME | default(ansible_env.HOME + "/.config") }}/i3'
-
-arch_i3_gaps:
-  enabled: true
-  inner: 5
-  outer: 5
-
-arch_i3_mod: Mod1
-arch_i3_term: alacritty
-arch_i3_launcher: rofi
-arch_i3_launcher_cmd: rofi -show drun -modi drun,run,window,ssh -show-icons -sidebar-mode -lines 8 -terminal {{ arch_i3_term }}
-arch_i3_lock_cmd: ''
-arch_i3_bar_cmd: ''
-arch_i3_window_toggler: rofi -show window -show-icons
-
-arch_i3_browser: firefox
-
-arch_i3_resize_by_px: 1
-
-arch_i3_autostart:
-  - ''
-
-arch_i3_autostart_always:
-  - ''
-
 arch_i3_packages:
   core:
-    - '{{ arch_i3_browser }}'
+    - alacritty
+    - firefox
     - arandr
     - redshift
     - udiskie
@@ -53,21 +29,5 @@ arch_i3_packages:
     - xfce4-notifyd
     - xfce4-pulseaudio-plugin
     - xfce4-screenshooter
-  terminal:
-    - '{{ arch_i3_term }}'  # actual emulator
-    - fzf
-    - git
-    - highlight
-    - ranger
-    - ripgrep
-    - rsync
-    - tmux
-    - tree
-    - unzip
-    - xclip
-  monitoring:
-    - htop
-    - iftop
-    - iotop
   laptop:
     - mate-power-manager
