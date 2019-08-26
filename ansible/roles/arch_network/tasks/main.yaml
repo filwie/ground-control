@@ -41,15 +41,18 @@
     state: present
   become: true
 
-- name: create directory for NordVPN openvpn configs
-  file:
-    path: '{{ arch_network_nordvpn_openvpn_configs_dir }}'
-    state: directory
-  become: true
+- block:
+    - name: create directory for NordVPN openvpn configs
+      file:
+        path: '{{ arch_network_nordvpn_openvpn_configs_dir }}'
+        state: directory
+      become: true
 
-- name: download and unarchive NordVPN openvpn configs
-  unarchive:
-    src: '{{ arch_network_nordvpn_openvpn_configs_url }}'
-    dest: '{{ arch_network_nordvpn_openvpn_configs_dir }}'
-    remote_src: yes
-  become: true
+    - name: download and unarchive NordVPN openvpn configs
+      unarchive:
+        src: '{{ arch_network_nordvpn_openvpn_configs_url }}'
+        dest: '{{ arch_network_nordvpn_openvpn_configs_dir }}'
+        remote_src: yes
+        creates: '{{ arch_network_nordvpn_openvpn_configs_dir }}/ovpn_tcp/us-ca10.nordvpn.com.tcp.ovpn'
+      become: true
+  tags: openvpn

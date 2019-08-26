@@ -61,6 +61,6 @@ Vagrant.configure(VAGRANT_API_VERSION) do |config|
     ansible.groups = { "arch" => [VAGRANT_HOSTNAME] }
     ansible.playbook = ANSIBLE_PLAYBOOK
     ansible.verbose = true
-    ansible.skip_tags = "kvm"
+    ansible.skip_tags = ["kvm"]
   end
 end
