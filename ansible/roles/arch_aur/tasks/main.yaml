@@ -41,13 +41,6 @@
   become_user: '{{ arch_aur_builder_user }}'
   when: arch_aur_yay_command_result.rc != 0
 
-- name: install python dependencies
-  pip:
-    name: '{{ arch_aur_pip_dependencies }}'
-  become: true
-  when: arch_aur_yay_command_result.rc != 0
-  notify: uninstall python dependencies
-
 - name: install AUR helper using makepkg
   command: makepkg --syncdeps --rmdeps --install --noconfirm
   args:

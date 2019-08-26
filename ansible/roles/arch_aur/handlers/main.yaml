@@ -2,7 +2,3 @@
 - name: reset ansible connection
   meta: reset_connection
   ignore_errors: true
-
-- name: uninstall python dependencies
-  pip:
-    name: '{{ arch_aur_pip_dependencies }}'
