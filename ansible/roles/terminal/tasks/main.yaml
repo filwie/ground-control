@@ -30,6 +30,7 @@
     - git:
         repo: '{{ terminal_fzf_git_url }}'
         dest: '{{ terminal_fzf_dest }}'
+        depth: 1
       register: fzf_clone_result
 
     - script: '{{ terminal_fzf_install_script }} --xdg --all'
