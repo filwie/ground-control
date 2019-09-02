@@ -23,7 +23,7 @@ terminal_vim_plug_dest: '{{ xdg_data_home + "/nvim/site/autoload/plug.vim"
                               if "neovim" in terminal_packages
                               else ansible_env.HOME + "/.vim/autoload/plug.vim" }}'
 
-
+terminal_tmux_config: '{{ ansible_env.HOME }}/.tmux.conf'
 terminal_tpm_git_url: 'https://github.com/tmux-plugins/tpm'
 terminal_tpm_dest: '{{ ansible_env.HOME }}/.tmux/plugins/tpm'
 terminal_tpm_install_plugins_script: '{{ terminal_tpm_dest }}/scripts/install_plugins.sh'

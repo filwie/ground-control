@@ -21,17 +21,24 @@
     dest: '{{ terminal_tpm_dest }}'
   register: tmux_installation_result
 
+- name: make sure Tmux plugin manager is enabled in Tmux config
+  lineinfile:
+    path: '{{ terminal_tmux_config }}'
+    create: true
+    line: "run '~/.tmux/plugins/tpm/tpm'"
+
 - name: install Tmux plugins
-  script: '{{ terminal_tpm_install_plugins_script }}'
+  command: '{{ terminal_tpm_install_plugins_script }}'
   when: tmux_installation_result is changed
 
-- name: install FZF
-  block:
-    - git:
+- block:
+    - name: clone FZF repository
+      git:
         repo: '{{ terminal_fzf_git_url }}'
         dest: '{{ terminal_fzf_dest }}'
         depth: 1
       register: fzf_clone_result
 
-    - script: '{{ terminal_fzf_install_script }} --xdg --all'
+    - name: run FZF install script
+      command: '{{ terminal_fzf_install_script }} --xdg --all'
       when: fzf_clone_result is changed
