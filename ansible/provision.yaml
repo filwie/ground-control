@@ -17,5 +17,7 @@
       tags: [arch, i3, gui]
     - name: terminal
       tags: terminal
+    - name: dotfiles
+      tags: dotfiles
     - name: arch_virtualization
       tags: [arch, virtualization]

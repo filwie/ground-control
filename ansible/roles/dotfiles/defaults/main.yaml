@@ -1,0 +1,4 @@
+---
+dotfiles_repo_url: 'https://github.com/filwie/dotfiles.git'
+dotfiles_repo_dest: '{{ ansible_env.XDG_CONFIG_HOME | default(ansible_env.HOME + "/.config") }}/dotfiles'
+dotfiles_install_script: '{{ dotfiles_repo_dest }}/install.py'

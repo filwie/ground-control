@@ -1,6 +1,6 @@
 arch_i3_packages:
   core:
-    - alacritty
+    - kitty
     - firefox
     - arandr
     - redshift
