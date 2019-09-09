@@ -1,0 +1,8 @@
+---
+- name: import tasks for specific actions
+  debug:
+    var: '{{ item }}'
+  loop:
+    - github_role_action
+    - github_token
+    - github_username

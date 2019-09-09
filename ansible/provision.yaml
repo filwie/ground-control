@@ -1,5 +1,7 @@
 ---
 - hosts: all
+  vars:
+    github_role_action: add
   roles:
     - name: arch_locale
       tags: [arch, locale]
@@ -19,5 +21,7 @@
       tags: terminal
     - name: dotfiles
       tags: dotfiles
+    - name: github
+      tags: github
     - name: arch_virtualization
       tags: [arch, virtualization]

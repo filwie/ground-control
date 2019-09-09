@@ -1,0 +1,14 @@
+github_role_action: add
+
+github_auth_type: '{{ ansible_env.AUTH_TYPE }}'
+
+github_username: '{{ ansible_env.GITHUB_USERNAME }}'
+github_token: '{{ ansible_env.GITHUB_TOKEN }}'
+
+github_url: https://api.github.com
+
+github_api_token_spec:
+  scopes:
+    - admin: public_key
+  note: 'Ansible token for managing public keys.'
+

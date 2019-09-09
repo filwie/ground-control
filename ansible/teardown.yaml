@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  vars:
+    github_role_action: delete
+  roles:
+    - name: github
+      tags: github
