@@ -1,8 +1,30 @@
 ---
-- name: import tasks for specific actions
-  debug:
-    var: '{{ item }}'
-  loop:
-    - github_role_action
-    - github_token
-    - github_username
+- name: generate SSH keypair for GitHub
+  openssh_keypair:
+    path: '{{ github_ssh_private_key }}'
+    type: '{{ github_ssh_key_algorithm }}'
+
+- name: read contents of SSH public key
+  shell: 'cat {{ github_ssh_public_key }}'
+  register: github_ssh_public_key_cat_result
+  changed_when: false
+
+- name: authorize key with GitHub
+  github_key:
+    name: '{{ github_ssh_key_name }}'
+    token: '{{ github_api_token }}'
+    pubkey: '{{ github_ssh_public_key_cat_result.stdout }}'
+    state: '{{ "absent" if github_role_action == "delete"
+               else "present" }}'
+
+- name: specify which key to use for GitHub in SSH config
+  blockinfile:
+    path: '{{ github_ssh_config }}'
+    create: true
+    block: |
+      Host GitHub
+      Hostname github.com
+      User git
+      IdentityFile {{ github_ssh_private_key }}
+
+#TODO: handle users in Vagrantfile
