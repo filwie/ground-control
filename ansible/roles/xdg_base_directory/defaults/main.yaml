@@ -75,6 +75,7 @@ xdg_base_directory_shell_files_blocks:
       {% endfor %}
 
       ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+      HISTFILE="$XDG_DATA_HOME/zsh/zsh_history"
 
       {% for var, val in xdg_base_directory_environment.items() -%}
         export {{ var }}="{{ val }}"
