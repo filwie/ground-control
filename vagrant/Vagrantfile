@@ -1,25 +1,23 @@
 # vi: set ft=ruby :
 
-VAGRANT_API_VERSION = "2"
 VAGRANT_BOX = "archlinux/archlinux"
 VAGRANT_HOSTNAME = "arch"
-
-ANSIBLE_DIRECTORY = "../ansible"
-ANSIBLE_PLAYBOOK = ANSIBLE_DIRECTORY + "/provision.yaml"
-
-SYNC_SRC = "../"
-SYNC_DEST = "/opt/ground-control"
-ANSIBLE_TEARDOWN_PLAYBOOK_VM_PATH = SYNC_DEST + "/ansible/teardown.yaml"
-
-GITHUB_USERNAME = ENV["GITHUB_USERNAME"]
-GITHUB_TOKEN = ENV["GITHUB_TOKEN"]
-
-ANSIBLE_GROUP = "vagrant"
-ANSIBLE_AS_ROOT = false
-
 CPU_CORES = 2
 MEMORY = 4048
 VRAM = 64
+
+SYNC_SRC = "../"
+SYNC_DEST = "/opt/ground-control"
+
+ANSIBLE_DIRECTORY = SYNC_DEST + "/ansible"
+ANSIBLE_PLAYBOOK = "provision.yaml"
+
+GITHUB_USERNAME = ENV["GITHUB_USERNAME"] || ""
+GITHUB_TOKEN = ENV["GITHUB_TOKEN"] || ""
+
+ANSIBLE_PLAYBOOK_TEARDOWN = ANSIBLE_DIRECTORY + "/teardown.yaml"
+ANSIBLE_ARGS = ["-e github_username=" + GITHUB_USERNAME,
+                "-e github_api_token=" + GITHUB_TOKEN]
 
 $setup_script = <<-SCRIPT
   sed -i 's/^#DNS=.*$/DNS=1.1.1.1/' /etc/systemd/resolved.conf
@@ -30,10 +28,10 @@ $setup_script = <<-SCRIPT
     pacman-key --init
     pacman-key --populate archlinux
   } && echo "$(date)" > /gpg_recreate_timestamp
-  command -v python &> /dev/null || pacman -Sy --needed --noconfirm python ansible
+  command -v python &> /dev/null || pacman -Sy --needed --noconfirm python
 SCRIPT
 
-Vagrant.configure(VAGRANT_API_VERSION) do |config|
+Vagrant.configure("2") do |config|
   config.vm.box = VAGRANT_BOX
   config.vm.hostname = VAGRANT_HOSTNAME
 
@@ -64,13 +62,11 @@ Vagrant.configure(VAGRANT_API_VERSION) do |config|
   config.vm.provision "shell", inline: $setup_script
 
   config.vm.provision "ansible_local" do |ansible|
-    ansible.become = ANSIBLE_AS_ROOT
-    ansible.compatibility_mode = "2.0"
-    ansible.config_file = ANSIBLE_DIRECTORY + "/ansible.cfg"
-    ansible.extra_vars = {}
-    ansible.groups = { "arch" => [VAGRANT_HOSTNAME] }
+#    ansible.compatibility_mode = "2.0"
     ansible.playbook = ANSIBLE_PLAYBOOK
-    ansible.verbose = true
+    ansible.provisioning_path = ANSIBLE_DIRECTORY
+    ansible.extra_vars = {}
+    ansible.raw_arguments = ANSIBLE_ARGS
     ansible.tags = ["github"]
     ansible.skip_tags = ["kvm"]
   end
@@ -78,10 +74,8 @@ Vagrant.configure(VAGRANT_API_VERSION) do |config|
   config.trigger.before :destroy do |trigger|
     trigger.info = "Running teardown playbook"
     trigger.run_remote = {
-      inline: "ansible-playbook $*",
-      args: [ANSIBLE_TEARDOWN_PLAYBOOK_VM_PATH,
-             "-e github_username=" + ENV["GITHUB_USERNAME"],
-             "-e github_token=" + ENV["GITHUB_TOKEN"]]
+      inline: "ansible-playbook " + ANSIBLE_PLAYBOOK_TEARDOWN,
+      args: ANSIBLE_ARGS
     }
   end
 end
