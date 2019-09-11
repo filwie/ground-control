@@ -9,6 +9,7 @@ VRAM = 64
 SYNC_SRC = "../"
 SYNC_DEST = "/opt/ground-control"
 
+ANSIBLE_USER = "vagrant"
 ANSIBLE_DIRECTORY = SYNC_DEST + "/ansible"
 ANSIBLE_PLAYBOOK = "provision.yaml"
 
@@ -18,18 +19,6 @@ GITHUB_TOKEN = ENV["GITHUB_TOKEN"] || ""
 ANSIBLE_PLAYBOOK_TEARDOWN = ANSIBLE_DIRECTORY + "/teardown.yaml"
 ANSIBLE_ARGS = ["-e github_username=" + GITHUB_USERNAME,
                 "-e github_api_token=" + GITHUB_TOKEN]
-
-$setup_script = <<-SCRIPT
-  sed -i 's/^#DNS=.*$/DNS=1.1.1.1/' /etc/systemd/resolved.conf
-  systemctl restart systemd-resolved
-  echo 'Server = https://ftp.icm.edu.pl/pub/Linux/dist/archlinux/$repo/os/$arch' > /etc/pacman.d/mirrorlist
-  [[ -f /gpg_recreate_timestamp ]] || {
-    rm -rf /etc/pacman.d/gnupg
-    pacman-key --init
-    pacman-key --populate archlinux
-  } && echo "$(date)" > /gpg_recreate_timestamp
-  command -v python &> /dev/null || pacman -Sy --needed --noconfirm python
-SCRIPT
 
 Vagrant.configure("2") do |config|
   config.vm.box = VAGRANT_BOX
@@ -47,19 +36,8 @@ Vagrant.configure("2") do |config|
     vbox.customize ['modifyvm', :id, '--clipboard', 'bidirectional']
   end
 
-  config.vm.provider :libvirt do |lvirt|
-    lvirt.driver = "kvm"
-    lvirt.memory = MEMORY
-    lvirt.cpus = CPU_CORES
-    lvirt.video_type = "vga"
-    lvirt.video_vram = VRAM * 1024
-    lvirt.connect_via_ssh = false
-    lvirt.management_network_name = "vagrant"
-    lvirt.management_network_address = "10.10.10.0/24"
-  end
-
   # no python equals no Ansible
-  config.vm.provision "shell", inline: $setup_script
+  config.vm.provision "shell", path: "../scripts/init.sh"
 
   config.vm.provision "ansible_local" do |ansible|
 #    ansible.compatibility_mode = "2.0"
@@ -74,7 +52,7 @@ Vagrant.configure("2") do |config|
   config.trigger.before :destroy do |trigger|
     trigger.info = "Running teardown playbook"
     trigger.run_remote = {
-      inline: "ansible-playbook " + ANSIBLE_PLAYBOOK_TEARDOWN,
+      inline: "sudo -u %s ansible-playbook %s -i %s/inventory $*" % [ANSIBLE_USER, ANSIBLE_PLAYBOOK_TEARDOWN, ANSIBLE_DIRECTORY],
       args: ANSIBLE_ARGS
     }
   end
