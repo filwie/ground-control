@@ -9,7 +9,7 @@
   register: github_ssh_public_key_cat_result
   changed_when: false
 
-- name: authorize key with GitHub
+- name: '{{ github_role_action }} GitHub SSH key'
   github_key:
     name: '{{ github_ssh_key_name }}'
     token: '{{ github_api_token }}'

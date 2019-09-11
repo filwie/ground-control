@@ -1,7 +1,7 @@
 github_role_action: add
 
-github_username: '{{ ansible_env.GITHUB_USERNAME }}'
-github_api_token: '{{ ansible_env.GITHUB_TOKEN }}'
+github_username: '{{ ansible_env.GITHUB_USERNAME | default("") }}'
+github_api_token: '{{ ansible_env.GITHUB_TOKEN | default("") }}'
 
 github_ssh_config: '{{ ansible_env.HOME }}/.ssh/config'
 github_ssh_key_name: 'dev-{{ ansible_hostname }}'
