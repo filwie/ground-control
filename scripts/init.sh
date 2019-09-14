@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PACKAGES=("python")
+PACKAGES=("python" "ansible")
 
 function setup_dns () {
     echo "Setting nameserver to 1.1.1.1"
@@ -36,7 +36,7 @@ function install_packages () {
         fi
     done
     if [[ -n "${packages_to_install[*]}" ]]; then
-        pacman -Sy --needed --noconfirm "${packages_to_install[*]}" > /dev/null
+        pacman -Sy --needed --noconfirm "${packages_to_install[@]}" > /dev/null
     fi
 }
 
