@@ -68,7 +68,7 @@ xdg_base_directory_environment:
   VAGRANT_ALIAS_FILE: '$XDG_DATA_HOME/vagrant/aliases'
 
 xdg_base_directory_shell_files_blocks:
-  - path: '{{ "/etc/zsh/zshenv" if xdg_base_directory_global | bool else ansible_env.HOME + "/.zshenv" }}'
+  - path: '{{ "/etc/zshenv" if xdg_base_directory_global | bool else ansible_env.HOME + "/.zshenv" }}'
     block: |
       {% for item in xdg_base_directory_spec.values() | list -%}
         export {{ item.var }}="{{ item.val }}"
