@@ -1,42 +1,44 @@
 ---
-- block:
-    - name: install xdg-user-dirs
+- name: xdg user directories
+  block:
+    - name: make sure xdg-user-dirs is installed
       package:
         name: xdg-user-dirs
         state: present
       become: true
 
-    - name: create xdg base directories
-      file:
-        path: '{{ item.path }}'
-        state: directory
-      loop: '{{ xdg_base_directory_spec.values() | list }}'
-
-    - name: create xdg-user-dirs directories
-      file:
-        path: '{{ ansible_env.HOME }}/{{ item }}'
-        state: directory
-      loop: '{{ xdg_base_directory_user_dirs.values() | list }}'
-
     - name: template xdg-user-dirs config
       template:
         src: user-dirs.dirs.j2
-        dest: "{{ ansible_env.HOME }}/.config/user-dirs.dirs"
+        dest: "~/.config/user-dirs.dirs"
       register: xdg_base_directory_config_result
+      notify: update xdg user directories
 
-    - name: update XDG directories
-      command: xdg-user-dirs-update
-      when:  xdg_base_directory_config_result is changed
+    - name: make sure xdg-user-dirs directories exist
+      file:
+        path: '~/{{ item }}'
+        state: directory
+      loop: '{{ xdg_base_directory_user_dirs.values() | list }}'
+
   when:  ansible_distribution != 'MacOSX'
+  tags: xdg_base_directory::user_directories
 
-- name: update global shell configurations with xdg env vars
+- name: create xdg base directories
+  file:
+    path: '{{ item.val }}'
+    state: directory
+  loop: '{{ xdg_base_directory_spec.values() | list }}'
+  tags: xdg_base_directory::base_directories
+
+- name: update configuration files of {{ item }}
   blockinfile:
-    path: '{{ item.path }}'
-    block: '{{ item.block }}'
+    path: '{{ xdg_base_directory_update_configs_paths_blocks[item].path }}'
+    block: '{{ xdg_base_directory_update_configs_paths_blocks[item].block }}'
     create: true
-  loop: '{{ xdg_base_directory_shell_files_blocks }}'
+  loop: '{{ xdg_base_directory_update_configs }}'
   become: true
   notify: reset connection
+  tags: xdg_base_directory::update_configs
 
 - name: flush handlers
   meta: flush_handlers

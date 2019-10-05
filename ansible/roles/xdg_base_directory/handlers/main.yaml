@@ -2,3 +2,6 @@
 - name: reset connection
   meta: reset_connection
   ignore_errors: true
+
+- name: update xdg user directories
+  command: xdg-user-dirs-update
