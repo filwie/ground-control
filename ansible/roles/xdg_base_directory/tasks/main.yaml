@@ -36,7 +36,7 @@
     create: true
   loop: '{{ xdg_base_directory_shell_files_blocks }}'
   become: true
-  register: xdg_base_directory_shell_update_result
+  notify: reset connection
 
-- meta: reset_connection
-  when: xdg_base_directory_shell_update_result is changed
+- name: flush handlers
+  meta: flush_handlers
