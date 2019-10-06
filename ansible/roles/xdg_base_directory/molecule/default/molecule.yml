@@ -12,6 +12,8 @@ platforms:
     image: opensuse/tumbleweed
   - name: arch
     image: archlinux/base
+  - name: ubuntu
+    image: ubuntu:18.04
 provisioner:
   name: ansible
   lint:
