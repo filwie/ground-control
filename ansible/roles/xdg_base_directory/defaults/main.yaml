@@ -48,7 +48,7 @@ xdg_base_directory_environment:
   XCOMPOSECACHE: '$XDG_CACHE_HOME/X11/xcompose'
   GNUPGHOME: '$XDG_DATA_HOME/gnupg'
   TMUX_TMPDIR: '$XDG_RUNTIME_DIR'
-  WINEPREFIX: '$XDG_DATA_HOME/wineprefixes/defaul'  # MUST BE CREATED
+  WINEPREFIX: '$XDG_DATA_HOME/wineprefixes/default'  # MUST BE CREATED
   VAGRANT_HOME: '$XDG_DATA_HOME/vagrant'
   VAGRANT_ALIAS_FILE: '$XDG_DATA_HOME/vagrant/aliases'
 
@@ -58,9 +58,12 @@ xdg_base_directory_update_configs:
   - bash
   - npm
 
+xdg_base_directory_global_zshenv: '{{ lookup("first_found", ["/etc/zshenv", "/etc/zsh/zshenv"])
+                                      | default("/etc/zsh/zshenv" if ansible_distribution == "Arch Linux" else "/etc/zshenv") }}'
+
 xdg_base_directory_update_configs_paths_blocks:
   zsh:
-    path: '{{ "/etc/zshenv" if xdg_base_directory_global | bool
+    path: '{{ xdg_base_directory_global_zshenv if xdg_base_directory_global | bool
               else ansible_env.ZDOTDIR + ".zshenv" | default(" ~/.zshenv") }}'
     block: |
       {% for item in xdg_base_directory_spec.values() | list -%}

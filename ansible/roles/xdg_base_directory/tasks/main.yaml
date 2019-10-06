@@ -1,4 +1,11 @@
 ---
+- name: create xdg base directories
+  file:
+    path: '{{ item.val }}'
+    state: directory
+  loop: '{{ xdg_base_directory_spec.values() | list }}'
+  tags: xdg_base_directory::base_directories
+
 - name: xdg user directories
   block:
     - name: make sure xdg-user-dirs is installed
@@ -22,13 +29,6 @@
 
   when:  ansible_distribution != 'MacOSX'
   tags: xdg_base_directory::user_directories
-
-- name: create xdg base directories
-  file:
-    path: '{{ item.val }}'
-    state: directory
-  loop: '{{ xdg_base_directory_spec.values() | list }}'
-  tags: xdg_base_directory::base_directories
 
 - name: update configuration files of {{ item }}
   blockinfile:
