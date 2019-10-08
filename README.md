@@ -1,4 +1,5 @@
 # Ground Control
+__WIP__
 This repository contains:
 - Ansible roles for configuring development environment
 - Vagrantfiles for setting up development VMs with a single command
@@ -9,7 +10,41 @@ This repository contains:
 - [x] Add a fancy test runner with colorful output
 - [ ] Add `Ansible Molecule` tests for each role
 - [ ] Write a good README for each role
-- [ ] Support three distributions: `Arch` `OpenSuse Tumbleweed` and `Ubuntu:18.04`
+- [ ] Support three distributions: `Arch` `OpenSUSE Tumbleweed` and `Ubuntu:18.04`
+
+## Usage
+### Running tests
+Execute `./test.sh` script and wait for a couple of <s>hours</s>minutes expecting
+wonderfull colorful output:
+
+<img src="https://raw.githubusercontent.com/filwie/images/master/ground-control/tests.png" alt="demo" width="100%"/>
+
+### Vagrant
+There are currently two supported distros (__WIP__): `Arch Linux` and `OpenSUSE Tumbleweed`.
+<i>Choose your destiny</i> - navigate to appropriate path:
+
+    vagrant/
+    ├── arch
+    │   └── Vagrantfile
+    └── opensuse
+        ├── Vagrantfile
+        └── init.sh
+
+Run `vagrant up --provision` in either `arch` or `opensuse` directory.
+Ofcourse, `vagrant` must be installed for this to work. Ansible does not have to, as
+`ansible_local` provisioner is used to provision the VMs.
+
+#### GitHub
+To generate SSH keypair and add public key to GitHub set following environment
+variables before running `vagrant provison` (or `vagrant up --provison`):
+
+variable | contents
+--- | ---
+`GITHUB_USERNAME` | self-explanatory
+`GITHUB_TOKEN` | GitHub API token with permissions to manage SSH keys
+
+To __remove__ generated key from GitHub account once again export above variables
+and use `varant destroy` - Vagrant should trigger `github` role with `delete` mode.
 
 ## Table of Contents
 
