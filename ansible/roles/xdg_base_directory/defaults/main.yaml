@@ -58,8 +58,7 @@ xdg_base_directory_update_configs:
   - bash
   - npm
 
-xdg_base_directory_global_zshenv: '{{ lookup("first_found", ["/etc/zshenv", "/etc/zsh/zshenv"])
-                                      | default("/etc/zsh/zshenv" if ansible_distribution == "Arch Linux" else "/etc/zshenv") }}'
+xdg_base_directory_global_zshenv: '{{ "/etc/zsh/zshenv" if ansible_distribution == "Arch Linux" else "/etc/zshenv" }}'
 
 xdg_base_directory_update_configs_paths_blocks:
   zsh:
