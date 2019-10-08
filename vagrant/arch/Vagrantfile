@@ -6,8 +6,8 @@ CPU_CORES = 2
 MEMORY = 4048
 VRAM = 64
 
-SYNC_SRC = "../"
-SYNC_DEST = "/opt/ground-control"
+repo_host = `git rev-parse --show-toplevel`
+repo_vm = "/opt/ground-control]"
 
 ANSIBLE_USER = "vagrant"
 ANSIBLE_DIRECTORY = SYNC_DEST + "/ansible"
@@ -43,8 +43,7 @@ Vagrant.configure("2") do |config|
 #    ansible.compatibility_mode = "2.0"
     ansible.playbook = ANSIBLE_PLAYBOOK
     ansible.provisioning_path = ANSIBLE_DIRECTORY
-    ansible.extra_vars = {}
-    ansible.raw_arguments = ANSIBLE_ARGS
+    ansible.extra_vars = {} ansible.raw_arguments = ANSIBLE_ARGS
     ansible.tags = ["github"]
     ansible.skip_tags = ["kvm"]
   end
