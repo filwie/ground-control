@@ -1,4 +1,15 @@
 # Ground Control
+This repository contains:
+- Ansible roles for configuring development environment
+- Vagrantfiles for setting up development VMs with a single command
+- __Tests!__
+- Outdated README 😢
+
+## #TODO
+- [x] Add a fancy test runner with colorful output
+- [ ] Add `Ansible Molecule` tests for each role
+- [ ] Write a good README for each role
+- [ ] Support three distributions: `Arch` `OpenSuse Tumbleweed` and `Ubuntu:18.04`
 
 ## Table of Contents
 
