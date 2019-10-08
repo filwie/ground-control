@@ -4,6 +4,12 @@ set -eu
 REPO_ROOT="$(dirname "$(realpath "${0}")")"
 ROLES_DIR="${REPO_ROOT}/ansible/roles"
 
+declare -a MOLECULE_FLAGS
+MOLECULE_COMMANDS=(
+    "converge"
+)
+KEEP_CONTAINERS=0
+
 declare -A POSSIBLE_TEST_RESULTS=(
     ["SKIP"]="$(tput setaf 3)skipped$(tput sgr0)"
     ["PASS"]="$(tput setaf 2)passed$(tput sgr0)"
@@ -11,6 +17,32 @@ declare -A POSSIBLE_TEST_RESULTS=(
 )
 
 declare -A TEST_RESULTS
+
+
+function usage () {
+    echo -e "USAGE: ./test.sh [-v|--verbose] [-l|--lint] [-i|--idempotence] [-k|--keep]"
+    exit 1
+}
+
+function handle_arguments () {
+    while [[ $# -gt 0 ]]; do
+        key="$1"
+        case $key in
+            -h|--help)
+                usage ;;
+            -l|--lint)
+                MOLECULE_COMMANDS+=("lint"); shift ;;
+            -i|--idempotence)
+                MOLECULE_COMMANDS+=("idempotence"); shift ;;
+            -k|--keep)
+                KEEP_CONTAINERS=1; shift ;;
+            -v|--verbose)
+                MOLECULE_FLAGS+=("--debug"); shift ;;
+            *)
+                usage ;;
+        esac
+    done
+}
 
 function max_length () {
     local len=-1
@@ -29,6 +61,7 @@ function cprintf () {
 function info () { cprintf 2 "${@}"; }
 function warning () { cprintf 3 "${@}"; }
 function error () { cprintf 1 "${@}"; }
+function run_log () { info "Running: ${*}"; eval "${@}"; }
 
 function check_molecule () {
     if ! command -v molecule > /dev/null; then
@@ -37,19 +70,28 @@ function check_molecule () {
     fi
 }
 
-function run_tests () {
-    local role_name role_test_result molecule_commands
-    molecule_command=(
-        "lint"
-        "converge"
-    )
+function run_molecule () {
+    for molecule_command in "${MOLECULE_COMMANDS[@]}"; do
+        cmd="molecule"
+        [[ -n "${MOLECULE_FLAGS[*]}" ]] && cmd+=" ${MOLECULE_FLAGS[*]}"
+        cmd+=" ${molecule_command}"
+        if ! run_log "${cmd}"; then
+            error "Molecule action %s failed.\n" "${molecule_command}"
+            return 1
+        fi
+    done
+    [[ "${KEEP_CONTAINERS}" == 0 ]] && molecule destroy
+    return 0
+}
 
+function run_all_tests () {
+    local role_name role_test_result
     for role in "${ROLES_DIR}"/*; do
         role_name="$(basename "${role}")"
         role_test_result="${POSSIBLE_TEST_RESULTS["FAIL"]}"
         if [[ -d "${role}/molecule" ]]; then
             pushd "${role}" > /dev/null || return
-            if $(true); then
+            if run_molecule; then
                 info "Role %s passed all tests!\n" "${role_name}"
                 role_test_result="${POSSIBLE_TEST_RESULTS["PASS"]}"
             else
@@ -78,13 +120,12 @@ function display_as_table () {
 }
 
 function main () {
+    handle_arguments "${@}"
     check_molecule
-    run_tests
+    run_all_tests
     echo
     display_as_table TEST_RESULTS
     echo
 }
 
-main
-
-
+main "${@}"
