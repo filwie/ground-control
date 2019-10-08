@@ -38,8 +38,12 @@ function check_molecule () {
 }
 
 function run_tests () {
-    local role_name
-    local role_test_result
+    local role_name role_test_result molecule_commands
+    molecule_command=(
+        "lint"
+        "converge"
+    )
+
     for role in "${ROLES_DIR}"/*; do
         role_name="$(basename "${role}")"
         role_test_result="${POSSIBLE_TEST_RESULTS["FAIL"]}"
