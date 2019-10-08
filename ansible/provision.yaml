@@ -1,7 +1,5 @@
 ---
-- hosts: all
-  vars:
-    github_role_action: add
+- hosts: arch
   roles:
     - name: arch_locale
       tags: [arch, locale]
@@ -13,15 +11,20 @@
       tags: [arch, aur]
     - name: arch_bluetooth
       tags: [arch, bluetooth]
+    - name: arch_virtualization
+      tags: [arch, virtualization]
+      # - name: arch_i3
+      #   tags: [arch, i3, gui]
+- hosts: all
+  vars:
+    github_role_action: add
+  roles:
     - name: xdg_base_directory
-      tags: [xdg]
-    - name: arch_i3
-      tags: [arch, i3, gui]
+      tags: xdg
     - name: terminal
       tags: terminal
     - name: dotfiles
       tags: dotfiles
     - name: github
       tags: github
-    - name: arch_virtualization
-      tags: [arch, virtualization]
+
