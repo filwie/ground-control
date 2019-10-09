@@ -20,7 +20,7 @@ declare -A TEST_RESULTS
 
 
 function usage () {
-    echo -e "USAGE: ./test.sh [-v|--verbose] [-l|--lint] [-i|--idempotence] [-k|--keep]"
+    echo -e "USAGE: ./test.sh [-v|--verbose] [-l|--lint] [-i|--idempotence] [-k|--keep] [-r|--rm]"
     exit 1
 }
 
@@ -38,6 +38,11 @@ function handle_arguments () {
                 KEEP_CONTAINERS=1; shift ;;
             -v|--verbose)
                 MOLECULE_FLAGS+=("--debug"); shift ;;
+            -r|--rm)
+                warning "Ignoring arguments other than --rm!\n"
+                while [[ $# -gt 0 ]]; do shift; done
+                MOLECULE_COMMANDS=("destroy")
+                ;;
             *)
                 usage ;;
         esac
@@ -61,7 +66,7 @@ function cprintf () {
 function info () { cprintf 2 "${@}"; }
 function warning () { cprintf 3 "${@}"; }
 function error () { cprintf 1 "${@}"; }
-function run_log () { info "Running: ${*}"; eval "${@}"; }
+function run_log () { info "Running: ${*} ($(basename "$(pwd)"))\n"; eval "${@}"; }
 
 function check_molecule () {
     if ! command -v molecule > /dev/null; then
@@ -78,6 +83,8 @@ function run_molecule () {
         if ! run_log "${cmd}"; then
             error "Molecule action %s failed.\n" "${molecule_command}"
             return 1
+        else
+            info "Molecule action %s succeeded.\n" "${molecule_command}"
         fi
     done
     [[ "${KEEP_CONTAINERS}" == 0 ]] && molecule destroy
