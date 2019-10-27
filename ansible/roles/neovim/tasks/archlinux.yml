@@ -1,0 +1,5 @@
+---
+- name: Update Pacman cache
+  command: pacman -Sy
+  register: pacman_update_cache_result
+  changed_when: '"is up to date" not in pacman_update_cache_result.stdout'
