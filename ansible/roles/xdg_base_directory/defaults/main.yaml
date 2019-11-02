@@ -6,13 +6,13 @@ xdg_base_directory_global: true
 xdg_base_directory_spec:
   config_home:
     var: XDG_CONFIG_HOME
-    val: '~/.config'
+    val: '$HOME/.config'
   data_home:
     var: XDG_DATA_HOME
-    val: '~/.local/share'
+    val: '$HOME/.local/share'
   cache_home:
     var: XDG_CACHE_HOME
-    val: '~/.cache'
+    val: '$HOME/.cache'
 
 xdg_base_directory_user_dirs_conf: '{{ xdg_base_directory_spec.config_home.val }}/user-dirs.dirs'
 
