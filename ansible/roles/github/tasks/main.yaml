@@ -9,19 +9,18 @@
   openssh_keypair:
     path: '{{ github_ssh_private_key }}'
     type: '{{ github_ssh_key_algorithm }}'
-
-- name: read contents of SSH public key
-  shell: 'cat {{ github_ssh_public_key }}'
-  register: github_ssh_public_key_cat_result
-  changed_when: false
+  register: github_keypair_create_result
+  tags: github::keypair
 
 - name: '{{ github_role_action }} GitHub SSH key'
   github_key:
     name: '{{ github_ssh_key_name }}'
     token: '{{ github_api_token }}'
-    pubkey: '{{ github_ssh_public_key_cat_result.stdout }}'
-    state: '{{ "absent" if github_role_action == "delete"
+    pubkey: '{{ github_keypair_create_result.public_key }}'
+    state: '{{ "absent" if github_role_action in ("rm", "remove", "delete")
                else "present" }}'
+  tags: github::add_delete_key
+  delegate_to: localhost
 
 - name: specify which key to use for GitHub in SSH config
   blockinfile:
@@ -32,5 +31,4 @@
       Hostname github.com
       User git
       IdentityFile {{ github_ssh_private_key }}
-
-#TODO: handle users in Vagrantfile
+  tags: github:ssh_config
