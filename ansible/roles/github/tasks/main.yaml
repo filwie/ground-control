@@ -1,4 +1,10 @@
 ---
+- name: make sure SSH directory exists
+  file:
+    path: '~/.ssh'
+    mode: 0700
+    state: directory
+
 - name: generate SSH keypair for GitHub
   openssh_keypair:
     path: '{{ github_ssh_private_key }}'
