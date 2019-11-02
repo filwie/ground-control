@@ -1,8 +1,8 @@
 git_user_name: ''
 git_user_email: ''
 
-git_gitconfig_path: '{{ ansible_env.HOME }}/.gitconfig'
-git_core_excludesfile: '{{ ansible_env.HOME }}/.gitglobalignore'
+git_gitconfig_path: '~/.gitconfig'
+git_core_excludesfile: '~/.gitignore_global'
 
 git_aliases:
     - aliases: '!git config -l | grep alias | cut -c 7-'

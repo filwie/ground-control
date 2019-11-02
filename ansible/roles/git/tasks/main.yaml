@@ -12,7 +12,7 @@
 
 - name: put global gitignore file in place
   copy:
-    src: gitglobalignore
+    src: gitignore_global
     dest: '{{ git_core_excludesfile }}'
     backup: true
 
