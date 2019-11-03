@@ -1,8 +1,4 @@
 ---
-- name: gather os specific variables
-  include_vars:
-    file: '{{ "MacOSX.yaml" if ansible_distribution == "MacOSX" else "Linux.yaml" }}'
-
 - name: make sure fontconfig and unzip are installed
   package:
     name: '{{ item }}'
@@ -17,29 +13,47 @@
     path: '{{ fonts_directory }}'
     state: directory
 
-- name: download and unarchive fonts
+- name: download font archives
+  get_url:
+    url: '{{ item }}'
+    dest: '/tmp/{{ item | basename }}'
+  register: fonts_download_result
+  loop: '{{ fonts_download_urls }}'
+
+- name: create directories to store fonts
+  file:
+    path: '{{ fonts_directory }}/{{ (item | basename).rstrip(".zip") }}'
+    state: directory
+  loop: '{{ fonts_download_urls }}'
+
+- name: unarchive fonts to {{ fonts_directory }}
   unarchive:
     src: '{{ item }}'
-    dest: '{{ fonts_directory }}'
+    dest: '{{ fonts_directory }}/{{ (item | basename).rstrip(".zip") }}'
     remote_src: true
-    creates: '{{ fonts_directory }}/Iosevka Nerd Font Complete.ttf'
-  loop: '{{ fonts_download_urls }}'
+    exclude:
+      - '* Mono*'
+      - '*Windows*'
+      - '*.otf'
+      - '*Narrow*'
+  loop: '{{ fonts_download_result.results | map(attribute="dest") | list }}'
   notify: update font cache
-  register: fonts_download_result
+  when:  fonts_download_result is changed
 
 - name: find files other than .ttf in fonts directory
   find:
     paths: '{{ fonts_directory }}'
     recurse: true
     excludes: '*.ttf,.uuid'
-    file_type: any
+    file_type: file
   register: fonts_directory_not_ttf_result
 
 - name: find Term and Windows font variants
   find:
     paths: '{{ fonts_directory }}'
     recurse: true
-    patterns: '*Term*, *Windows*'
+    patterns: '* Mono*,* Term *,* Windows *'
+    file_type: file
   register: fonts_directory_win_term_result
 
 - name: remove found non-ttf, windows and term variants
