@@ -27,7 +27,7 @@
         state: directory
       loop: '{{ xdg_base_directory_user_dirs.values() | list }}'
 
-  when:  ansible_distribution != 'MacOSX'
+  when: ansible_distribution != 'MacOSX'
   tags: xdg_base_directory::user_directories
 
 - name: update configuration files of {{ item }}
