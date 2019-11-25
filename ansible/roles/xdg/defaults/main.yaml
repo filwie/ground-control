@@ -1,0 +1,82 @@
+---
+# either 'local' or 'global'
+xdg_config_scope: 'global'
+
+xdg_require_sudo: '{{ true if xdg_config_scope == "global" else false }}'
+
+xdg_spec:
+  XDG_CONFIG_HOME: '~/.config'
+  XDG_DATA_HOME: '~/.local/share'
+  XDG_CACHE_HOME: '~/.cache'
+
+xdg_user_dirs_conf: '{{ xdg_spec.XDG_CONFIG_HOME }}/user-dirs.dirs'
+xdg_user_dirs:
+  XDG_DOWNLOAD_DIR: '~/Downloads'
+  XDG_MUSIC_DIR: '~/Music'
+  XDG_PICTURES_DIR: '~/Pictures'
+  XDG_DESKTOP_DIR: '~/Desktop'
+  XDG_DOCUMENTS_DIR: '~/Documents'
+  XDG_VIDEOS_DIR: '~/Videos'
+  XDG_TEMPLATES_DIR: ''
+  XDG_PUBLICSHARE_DIR: ''
+
+xdg_env_vars:
+  BASH_COMPLETION_USER_FILE: '$XDG_CONFIG_HOME/bash-completion/bash_completion'
+  LESSHISTFILE: '$XDG_DATA_HOME/lesshst'
+  CARGO_HOME: '$XDG_DATA_HOME/cargo'
+  RUSTUP_HOME: '$XDG_DATA_HOME/rustup'
+  JUPYTER_CONFIG_DIR: '$XDG_CONFIG_HOME/jupyter'
+  IPYTHONDIR: '$XDG_CONFIG_HOME/ipython'
+  PYTHON_EGG_CACHE: '$XDG_CACHE_HOME/python-eggs'
+  NODE_REPL_HISTORY: '$XDG_DATA_HOME/node_repl_history'
+  NPM_CONFIG_USERCONFIG: '$XDG_CONFIG_HOME/npm/npmrc'
+  MYSQL_HISTFILE: '$XDG_DATA_HOME/mysql_history'
+  _JAVA_OPTIONS: '-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java'
+  DOCKER_CONFIG: '$XDG_CONFIG_HOME/docker'
+  MACHINE_STORAGE_PATH: '$XDG_DATA_HOME/docker-machine'
+  GTK_RC_FILES: '$XDG_CONFIG_HOME/gtk-1.0/gtkrc'
+  GTK2_RC_FILES: '$XDG_CONFIG_HOME/gtk-2.0/gtkrc'
+  TERMINFO: '$XDG_DATA_HOME/terminfo'
+  TERMINFO_DIRS: '$XDG_DATA_HOME/terminfo:/usr/share/terminfo'
+  XCOMPOSEFILE: '$XDG_CONFIG_HOME/X11/xcompose'
+  XCOMPOSECACHE: '$XDG_CACHE_HOME/X11/xcompose'
+  GNUPGHOME: '$XDG_DATA_HOME/gnupg'
+  TMUX_TMPDIR: '$XDG_RUNTIME_DIR'
+  WINEPREFIX: '$XDG_DATA_HOME/wineprefixes/default'  # MUST BE CREATED
+  VAGRANT_HOME: '$XDG_DATA_HOME/vagrant'
+  VAGRANT_ALIAS_FILE: '$XDG_DATA_HOME/vagrant/aliases'
+
+xdg_rc_files_to_update:
+  - zsh
+  - bash
+  - fish
+  - npm
+
+xdg_rc_files:
+  zsh:
+    path:
+      local: '{{ ansible_env.ZDOTDIR | default("~") }}/.zshenv'
+      global: '{{ "/etc/zsh/zshenv" if ansible_distribution == "Arch Linux" else "/etc/zshenv" }}'
+    block: "{{ xdg_posix_block }}"
+
+  bash:
+    path:
+      global: '/etc/profile'
+      local: '~/.profile'
+    block: '{{ xdg_posix_block }}'
+
+  fish:
+    path:
+      global: "/etc/fish/conf.d/00-xdg.fish"
+      local: '{{ xdg_spec.XDG_CONFIG_HOME }}/fish/conf.d/00-xdg.fish'
+    block: '{{ xdg_fish_block }}'
+
+  npm:
+    path:
+      global: '/etc/npmrc'
+      local: '{{ xdg_spec.XDG_CONFIG_HOME }}/npm/npmrc'
+    block: |
+      prefix=$XDG_DATA_HOME/npm
+      cache=$XDG_CACHE_HOME/npm
+      tmp=$XDG_RUNTIME_DIR/npm
+      init-module=$XDG_CONFIG_HOME/npm/config/npm-init.js

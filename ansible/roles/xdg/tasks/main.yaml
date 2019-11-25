@@ -1,10 +1,10 @@
 ---
 - name: create xdg base directories
   file:
-    path: '{{ item.val }}'
+    path: '{{ item }}'
     state: directory
-  loop: '{{ xdg_base_directory_spec.values() | list }}'
-  tags: xdg_base_directory::base_directories
+  loop: '{{ xdg_spec.values() | list }}'
+  tags: xdg.base-dirs
 
 - name: xdg user directories
   block:
@@ -17,28 +17,27 @@
     - name: template xdg-user-dirs config
       template:
         src: user-dirs.dirs.j2
-        dest: "~/.config/user-dirs.dirs"
-      register: xdg_base_directory_config_result
+        dest: '{{ xdg_spec.XDG_CONFIG_HOME }}/user-dirs.dirs'
       notify: update xdg user directories
 
     - name: make sure xdg-user-dirs directories exist
       file:
         path: '~/{{ item }}'
         state: directory
-      loop: '{{ xdg_base_directory_user_dirs.values() | list }}'
+      loop: '{{ xdg_user_dirs.values() | list }}'
 
   when: ansible_distribution != 'MacOSX'
-  tags: xdg_base_directory::user_directories
+  tags: xdg.user-dirs
 
-- name: update configuration files of {{ item }}
+- name: update RC files of {{ xdg_rc_files_to_update | join(', ') }}
   blockinfile:
-    path: '{{ xdg_base_directory_update_configs_paths_blocks[item].path }}'
-    block: '{{ xdg_base_directory_update_configs_paths_blocks[item].block }}'
+    path: '{{ xdg_rc_files[item].path[xdg_config_scope] }}'
+    block: '{{ xdg_rc_files[item].block }}'
     create: true
-  loop: '{{ xdg_base_directory_update_configs }}'
-  become: true
+  loop: '{{ xdg_rc_files.keys() | list }}'
+  become: '{{ xdg_require_sudo }}'
   notify: reset connection
-  tags: xdg_base_directory::update_configs
+  tags: xdg.rc_files
 
 - name: flush handlers
   meta: flush_handlers

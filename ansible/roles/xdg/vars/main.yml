@@ -1,0 +1,9 @@
+xdg_posix_block: |
+  {% for k,v in (xdg_spec | combine(xdg_env_vars)).items() %}
+  export {{ k }}="{{ v | replace('~', '$HOME') }}"
+  {% endfor %}
+
+xdg_fish_block: |
+  {% for k,v in (xdg_spec | combine(xdg_env_vars)).items() %}
+  set -gx {{ k }} "{{ v | replace('~', '$HOME') }}"
+  {% endfor %}
