@@ -17,8 +17,6 @@ xdg_user_dirs:
   XDG_DESKTOP_DIR: '~/Desktop'
   XDG_DOCUMENTS_DIR: '~/Documents'
   XDG_VIDEOS_DIR: '~/Videos'
-  XDG_TEMPLATES_DIR: ''
-  XDG_PUBLICSHARE_DIR: ''
 
 xdg_env_vars:
   BASH_COMPLETION_USER_FILE: '$XDG_CONFIG_HOME/bash-completion/bash_completion'
@@ -56,8 +54,8 @@ xdg_rc_files:
   zsh:
     path:
       local: '{{ ansible_env.ZDOTDIR | default("~") }}/.zshenv'
-      global: '{{ "/etc/zsh/zshenv" if ansible_distribution == "Arch Linux" else "/etc/zshenv" }}'
-    block: "{{ xdg_posix_block }}"
+      global: '{{ "/etc/zsh/zshenv" if ansible_distribution | default("") == "Arch Linux" else "/etc/zshenv" }}'
+    block: '{{ xdg_posix_block }}'
 
   bash:
     path:

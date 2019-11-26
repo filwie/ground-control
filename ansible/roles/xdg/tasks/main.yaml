@@ -14,19 +14,19 @@
         state: present
       become: true
 
+    - name: make sure xdg-user-dirs directories exist
+      file:
+        path: '{{ item }}'
+        state: directory
+      loop: '{{ xdg_user_dirs.values() | list }}'
+      when: item | length > 0
+
     - name: template xdg-user-dirs config
       template:
         src: user-dirs.dirs.j2
         dest: '{{ xdg_spec.XDG_CONFIG_HOME }}/user-dirs.dirs'
-      notify: update xdg user directories
 
-    - name: make sure xdg-user-dirs directories exist
-      file:
-        path: '~/{{ item }}'
-        state: directory
-      loop: '{{ xdg_user_dirs.values() | list }}'
-
-  when: ansible_distribution != 'MacOSX'
+  when: ansible_system | default('') == 'Linux'
   tags: xdg.user-dirs
 
 - name: update RC files of {{ xdg_rc_files_to_update | join(', ') }}
