@@ -1,0 +1,7 @@
+---
+- name: Add apt repository for {{ item }}
+  apt_repository:
+    repo: '{{ item }}'
+  loop:
+    - 'ppa:fish-shell/release-3'
+    - 'ppa:neovim-ppa/stable'

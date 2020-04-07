@@ -1,0 +1,7 @@
+---
+# tasks file for fish
+- name: Add Fish 3 PPA
+  apt_repository:
+    repo: ppa:fish-shell/release-3
+  become: true
+  when: ansible_distribution == 'Ubuntu'

@@ -12,6 +12,12 @@ This repository contains:
 - [ ] Write a good README for each role
 - [ ] Support three distributions: `Arch` `OpenSUSE Tumbleweed` and `Ubuntu:18.04`
 
+## Supported platforms
+Most roles support below operating systems:
+- [ ] MacOS (not covered by `molecule` tests)
+- [ ] OpenSUSE Tumbleweed
+- [ ] Ubuntu 19.04
+
 ## Usage
 ### Running tests
 Execute `./test.sh` script and wait for a couple of <s>hours</s>minutes expecting

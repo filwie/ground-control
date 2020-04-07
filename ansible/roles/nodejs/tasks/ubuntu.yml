@@ -1,0 +1,5 @@
+---
+- name: Add an Apt signing key for NodeJS repository
+  apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    state: present

@@ -1,9 +1,0 @@
-arch_reflector_service_timer_dir: /etc/systemd/system
-
-arch_reflector_executable: /usr/bin/reflector
-arch_reflector_repository_number: 100
-arch_reflector_sort_by: rate
-arch_reflector_mirror_list: /etc/pacman.d/mirrorlist
-
-arch_reflector_enable_timer: true
-arch_reflector_timer_frequency: weekly

@@ -1,8 +1,0 @@
----
-- name: reset connection
-  meta: reset_connection
-  failed_when: false
-
-
-- name: update xdg user directories
-  command: xdg-user-dirs-update
