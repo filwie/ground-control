@@ -1,0 +1,38 @@
+---
+- name: Configure the user
+  hosts: all
+  gather_facts: false
+  pre_tasks:
+    - name: Assert variables are set
+      assert:
+        that:
+          - ssh_user is defined
+          - ssh_public_key is defined
+  tasks:
+    - name: Create user
+      user:
+        name: "{{ ssh_user }}"
+        generate_ssh_key: yes
+        ssh_key_bits: 2048
+        ssh_key_file: .ssh/id_rsa
+      become: true
+
+    - name: Configure SSH authorization
+      authorized_key:
+        user: "{{ ssh_user }}"
+        key: "{{ ssh_public_key }}"
+      become: true
+
+    - name: Make sure sudoers.d is included
+      lineinfile:
+        path: /etc/sudoers
+        line: "#includedir /etc/sudoers.d"
+      become: true
+
+    - name: Enable no password sudo for user
+      lineinfile:
+        path: "/etc/sudoers.d/{{ ssh_user | regex_replace('[^0-9a-zA-Z]+', '') }}"
+        line: "{{ ssh_user }} ALL=(ALL) NOPASSWD: ALL"
+        mode: "0440"
+        create: true
+      become: true

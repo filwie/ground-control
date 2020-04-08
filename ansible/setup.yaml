@@ -1,13 +1,8 @@
 ---
-- hosts: all
-  vars:
-    github_role_action: add
-  roles:
-    - name: xdg_base_directory
-      tags: xdg
-    - name: terminal
-      tags: terminal
-    - name: dotfiles
-      tags: dotfiles
-    - name: github
-      tags: github
+- name: Setup the machine
+  hosts: all
+  tasks:
+    - command: whoami
+      register: whoami
+
+    - debug: var=whoami.stdout
