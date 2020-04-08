@@ -1,5 +1,0 @@
----
-- name: debug
-  debug:
-    var: ansible_distribution_release
-
