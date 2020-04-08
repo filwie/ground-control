@@ -4,3 +4,6 @@
 [submodule "ansible/roles/xdg"]
 	path = ansible/roles/xdg
 	url = https://github.com/filwie/ansible-xdg
+[submodule "ansible/roles/neovim"]
+	path = ansible/roles/neovim
+	url = https://github.com/filwie/ansible-neovim
