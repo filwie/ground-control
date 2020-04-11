@@ -1,8 +1,6 @@
 ---
 - name: Setup the machine
   hosts: all
-  tasks:
-    - command: whoami
-      register: whoami
-
-    - debug: var=whoami.stdout
+  roles:
+    - xdg
+    - neovim
