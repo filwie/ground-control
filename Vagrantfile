@@ -1,6 +1,12 @@
 # vi: set ft=ruby sw=2:
 # frozen_string_literal: true
 
+# variable          | default value
+# ------------------|------------------------
+# VAGRANT_SSH_KEY   | `~/.ssh/id_rsa`
+# VAGRANT_GIT_USER  | `git config user.name`
+# VAGRANT_GIT_EMAIL | `git config user.email`
+
 box = 'opensuse/Tumbleweed.x86_64'
 hostname = 'opensuse'
 
@@ -12,6 +18,8 @@ vm_spec = {
 ssh_private_key = ENV['VAGRANT_SSH_KEY'] || "#{Dir.home}/.ssh/id_rsa"
 ssh_public_key = "#{ssh_private_key}.pub"
 ssh_user = ENV['USER']
+git_user = ENV['VAGRANT_GIT_USER'] || `git config user.name`.strip
+git_user = ENV['VAGRANT_GIT_EMAIL'] || `git config user.email`.strip
 
 repo_path = {
   host: '.',
@@ -20,12 +28,18 @@ repo_path = {
 
 VAGRANT_CMD = ARGV[0]
 
-def get_file_contents(file_path)
+def file_contents(file_path)
   unless File.file?(file_path)
     raise IOError, "Could not read file contents. File #{file_path} not found."
   end
 
   File.read(file_path)
+end
+
+def configure_provider(provider, spec)
+  provider.name = hostname
+  provider.memory = spec[:memory]
+  provider.cpus = spec[:cores]
 end
 
 Vagrant.configure('2') do |config|
@@ -34,24 +48,15 @@ Vagrant.configure('2') do |config|
   config.vm.synced_folder '.', '/vagrant', disabled: true
   config.vm.synced_folder repo_path[:host], repo_path[:vm], type: 'nfs'
 
-  config.vm.provider :virtualbox do |v|
-    v.name = hostname
-    v.memory = vm_spec[:memory]
-    v.cpus = vm_spec[:cores]
-  end
-
-  config.vm.provider :libvirt do |v|
-    v.default_prefix = hostname
-    v.memory = vm_spec[:memory]
-    v.cpus = vm_spec[:cores]
-  end
+  configure_provider(config.vm.provider(:virtualbox))
+  configure_provider(config.vm.provider(:libvirt))
 
   config.vm.provision 'ansible_local' do |ansible|
     ansible.playbook = 'bootstrap.yaml'
     ansible.provisioning_path = "#{repo_path[:vm]}/ansible"
     ansible.extra_vars = {
       "ssh_user": ssh_user,
-      "ssh_public_key": get_file_contents(ssh_public_key).strip
+      "ssh_public_key": file_contents(ssh_public_key).strip
     }
     ansible.compatibility_mode = '2.0'
   end

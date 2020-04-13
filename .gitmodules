@@ -1,6 +1,3 @@
-[submodule "dotfiles"]
-	path = dotfiles
-	url = https://github.com/filwie/dotfiles
 [submodule "ansible/roles/xdg"]
 	path = ansible/roles/xdg
 	url = https://github.com/filwie/ansible-xdg
