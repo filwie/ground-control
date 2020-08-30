@@ -8,6 +8,7 @@
   template:
     src: '{{ item }}.j2'
     dest: '{{ arch_reflector_service_timer_dir }}/{{ item }}'
+    mode: '0600'
   become: true
   loop:
     - reflector.service

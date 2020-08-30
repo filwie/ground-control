@@ -9,6 +9,8 @@ arch_network_dns_nameservers:
   - 208.67.222.222
   - 208.67.220.220
 
+arch_network_networkmanager: false
+
 arch_network_dependencies:
   - unzip
   - ca-certificates
@@ -17,7 +19,9 @@ arch_network_packages:
   - networkmanager
   - networkmanager-openvpn
   - network-manager-applet
-  - gnome-keyring  # for storing WIFI passwords encrypted
+  - gnome-keyring
+
+arch_network_nordvpn: false
 
 arch_network_nordvpn_openvpn_configs_url: https://downloads.nordcdn.com/configs/archives/servers/ovpn.zip
 arch_network_nordvpn_openvpn_configs_dir: /etc/openvpn/nordvpn

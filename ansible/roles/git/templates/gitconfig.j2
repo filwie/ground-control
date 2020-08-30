@@ -15,24 +15,3 @@
 [core]
 	excludesfile = {{ git_core_excludesfile }}
 	editor = {{ git_core_editor }}
-
-[merge]
-	tool = {{ git_merge_tool }}
-
-[mergetool]
-  prompt = true
-
-[diff]
-	tool = {{ git_diff_tool }}
-
-{% for difftool in git_diff_tools %}
-[difftool "{{ difftool.name }}"]
-	cmd = {{  difftool.cmd }}
-{% endfor %}
-
-[alias]
-	{% for alias in git_aliases -%}
-		{% for key, value in alias.items() -%}
-			{{ key }} = {{ value }}
-		{% endfor %}
-	{% endfor %}

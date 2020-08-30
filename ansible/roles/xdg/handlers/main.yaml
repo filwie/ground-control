@@ -1,4 +1,0 @@
----
-- name: reset connection
-  meta: reset_connection
-  failed_when: false

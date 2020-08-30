@@ -1,0 +1,8 @@
+---
+arch_libvirt_packages:
+  - qemu
+  - libvirt
+  - virt-manager
+  - vagrant
+
+arch_libvirt_users: []

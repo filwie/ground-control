@@ -12,15 +12,12 @@
 
 - name: put global gitignore file in place
   copy:
-    src: gitignore_global
+    src: gitignore
     dest: '{{ git_core_excludesfile }}'
     backup: true
 
-- name: make sure neovim is installed if it is set as git editor
+- name: make sure core editor is installed
   package:
-    name:
-      - neovim
-      - python-neovim
+    name: '{{ git_core_editor }}'
     state: present
   become: true
-  when: git_core_editor == 'nvim'

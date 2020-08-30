@@ -4,6 +4,6 @@ arch_aur_helper_git_repo_path: /tmp/yay
 arch_aur_builder_user: aur_builder
 
 arch_aur_pacman_dependencies:
+  - glibc
   - git
   - base-devel
-  - python-pip

@@ -1,0 +1,28 @@
+---
+- name: install packages
+  package:
+    name: '{{ arch_libvirt_packages }}'
+    state: present
+  become: true
+
+- name: enable libvirtd service
+  systemd:
+    name: libvirtd
+    state: started
+    enabled: true
+  become: true
+
+- name: create libvirt group
+  group:
+    name: libvirt
+    state: present
+  become: true
+
+- name: add users to group
+  user:
+    name: '{{ item }}'
+    groups: libvirt
+    append: true
+  become: true
+  notify: reset ansible connection
+  loop: '{{ arch_libvirt_users }}'

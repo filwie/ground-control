@@ -29,24 +29,29 @@
     state: link
   become: true
 
-- name: make sure dependencies are installed
-  package:
-    name: '{{ arch_network_dependencies }}'
-    state: present
-  become: true
+- name: NetworkManager
+  block:
 
-- name: install network utilities
-  package:
-    name: '{{ arch_network_packages }}'
-    state: present
-  become: true
+    - name: make sure dependencies are installed
+      package:
+        name: '{{ arch_network_dependencies }}'
+        state: present
 
-- block:
+    - name: install network utilities
+      package:
+        name: '{{ arch_network_packages }}'
+        state: present
+
+  become: true
+  when: arch_network_networkmanager
+
+- name: NordVPN
+  block:
+
     - name: create directory for NordVPN openvpn configs
       file:
         path: '{{ arch_network_nordvpn_openvpn_configs_dir }}'
         state: directory
-      become: true
 
     - name: download and unarchive NordVPN openvpn configs
       unarchive:
@@ -54,5 +59,6 @@
         dest: '{{ arch_network_nordvpn_openvpn_configs_dir }}'
         remote_src: yes
         creates: '{{ arch_network_nordvpn_openvpn_configs_dir }}/ovpn_tcp/us-ca10.nordvpn.com.tcp.ovpn'
-      become: true
-  tags: openvpn
+
+  when: arch_network_nordvpn
+  become: true

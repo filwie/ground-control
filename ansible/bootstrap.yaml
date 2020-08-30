@@ -1,0 +1,78 @@
+---
+- name: bootstrap vm before running actual setup playbook
+  hosts: all
+  gather_facts: false
+  vars:
+
+    config_file: '{{ playbook_dir | dirname }}/config.yaml'
+    generated_inventory: '{{ playbook_dir }}/inventory.yaml'
+
+  pre_tasks:
+
+    - name: assert variables are set
+      assert:
+        that:
+          - ssh_user is defined
+          - ssh_public_key is defined
+
+  tasks:
+
+    - name: create user
+      user:
+        name: '{{ ssh_user }}'
+        generate_ssh_key: yes
+        ssh_key_bits: 2048
+        ssh_key_file: .ssh/id_rsa
+      become: true
+
+    - name: configure SSH authorization
+      authorized_key:
+        user: '{{ ssh_user }}'
+        key: '{{ ssh_public_key }}'
+      become: true
+
+    - name: make sure sudoers.d is included
+      lineinfile:
+        path: /etc/sudoers
+        line: '#includedir /etc/sudoers.d'
+      become: true
+
+    - name: enable no password sudo for user
+      lineinfile:
+        path: '/etc/sudoers.d/{{ ssh_user | regex_replace("[^0-9a-zA-Z]+", "") }}'
+        line: '{{ ssh_user }} ALL=(ALL) NOPASSWD: ALL'
+        mode: '0440'
+        create: true
+      become: true
+
+    - name: Generate inventory from config
+      block:
+
+        - name: Slurp config file
+          slurp:
+            src: '{{ config_file }}'
+          register: config_file_slurp
+
+        - name: Set helper variables
+          block:
+            - set_fact:
+                config: '{{ (config_file_slurp.content | b64decode | from_yaml ) }}'
+
+            - set_fact:
+                vars_from_config: '{{ config.provisioning.vars }}'
+
+        - name: Write inventory to file
+          blockinfile:
+            path: '{{ generated_inventory }}'
+            create: true
+            mode: '0644'
+            block: |
+              ---
+              all:
+                hosts:
+                  {{ config.meta.name }}:
+                    ansible_host: 127.0.0.1
+                    ansible_connection: local
+                vars:
+                  {{ vars_from_config | to_yaml }}
+

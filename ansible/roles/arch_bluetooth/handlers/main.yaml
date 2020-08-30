@@ -1,3 +1,1 @@
-- name: reset ansible connection
-  meta: reset_connection
-  ignore_errors: true
+
