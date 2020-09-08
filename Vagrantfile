@@ -50,64 +50,10 @@ Vagrant.configure('2') do |config|
     libvirt.video_vram = conf.spec.vram
   end
 
-  config.vm.provision 'shell' do |sh|
-    # fixes for pacman issues on windows10/virtualbox combo...
-    sh.inline = %({
-      return 0
-      {
-        echo 'Server = http://ftp.icm.edu.pl/pub/Linux/dist/archlinux/$repo/os/$arch'
-        echo 'Server = https://ftp.icm.edu.pl/pub/Linux/dist/archlinux/$repo/os/$arch'
-        echo 'Server = http://arch.midov.pl/arch/$repo/os/$arch'
-        echo 'Server = http://arch.nixlab.pl/$repo/os/$arch'
-        echo 'Server = https://arch.nixlab.pl/$repo/os/$arch'
-        echo 'Server = http://mirror.onet.pl/pub/mirrors/archlinux/$repo/os/$arch'
-        echo 'Server = http://piotrkosoft.net/pub/mirrors/ftp.archlinux.org/$repo/os/$arch'
-        echo 'Server = http://mirror.sfinae.tech/pub/mirrors/archlinux/$repo/os/$arch'
-        echo 'Server = https://mirror.sfinae.tech/pub/mirrors/archlinux/$repo/os/$arch'
-        echo 'Server = http://ftp.vectranet.pl/archlinux/$repo/os/$arch'
-      } | tee /etc/pacman.d/mirrorlist
+  config.vm.provision 'shell', path: 'scripts/bootstrap.sh'
 
-      {
-        echo 'nameserver 1.1.1.1'
-        echo 'nameserver 8.8.8.8'
-      } | tee /etc/resolv.conf
-
-
-      # https://bbs.archlinux.org/viewtopic.php?id=253809&p=2
-
-      mkdir /etc/gcrypt/
-      {
-        echo 'padlock-rng'
-        echo 'padlock-aes'
-        echo 'padlock-sha'
-        echo 'padlock-mmul'
-        echo 'intel-cpu'
-        echo 'intel-fast-shld'
-        echo 'intel-bmi2'
-        echo 'intel-ssse3'
-        echo 'intel-pclmul'
-        echo 'intel-aesni'
-        echo 'intel-rdrand'
-        echo 'intel-avx'
-        echo 'intel-avx2'
-        echo 'intel-rdtsc'
-        echo 'arm-neon'
-      } | tee /etc/gcrypt/hwf.deny
-
-      timedatectl set-timezone Europe/Warsaw
-      hwclock -w
-
-      pacman -Scc --noconfirm
-      rm -R /etc/pacman.d/gnupg/
-      yes | gpg --refresh-keys
-      yes | pacman-key --init
-      yes | pacman-key --populate
-      yes | pacman-key --refresh-keys
-
-      rm -rf /var/cache/pacman/pkg/*
-      pacman -Syyu --needed --noconfirm ansible archlinux-keyring
-    })
-  end
+  config.vagrant.plugins = 'vagrant-reload'
+  config.vm.provision :reload
 
   config.vm.provision 'ansible_local' do |ansible|
     ansible.playbook = 'bootstrap.yaml'
