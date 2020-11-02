@@ -5,7 +5,7 @@ terminal_packages:
   - git
   - highlight
   - ranger
-  #  - ripgrep
+  - ripgrep
   - rsync
   - tmux
   - tree
@@ -15,7 +15,6 @@ terminal_packages:
   - iftop
   - iotop
   - neovim
-  # - terminfo
 
 # TODO: tic in OpenSuse - package ncurses-devel
 # TODO: OpenSuse - no wget or curl by default - fzf installation fails (cannot download binary)

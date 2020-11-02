@@ -27,15 +27,10 @@
         dest: '{{ terminal_tpm_dest }}'
       register: tmux_installation_result
 
-    - name: make sure Tmux plugin manager is enabled in Tmux config
-      lineinfile:
-        path: '{{ terminal_tmux_config }}'
-        create: true
-        line: "run '~/.tmux/plugins/tpm/tpm'"
-
     - name: install Tmux plugins
       command: '{{ terminal_tpm_install_plugins_script }}'
       when: tmux_installation_result is changed
+
   tags: terminal::tmux_plugins
 
 - block:
