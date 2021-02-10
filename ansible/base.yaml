@@ -1,0 +1,34 @@
+---
+# i3-gaps kitty fish neovim vim tmux xorg-xwininfo conky nitrogen picom npm nodejs ctags
+- hosts: localhost
+  handlers:
+
+    - name: reset connection
+      meta: reset_connection
+      ignore_errors: true
+
+  vars:
+
+    docker: true
+    ansible_connection: local
+
+  pre_tasks:
+
+  roles:
+    - name: docker
+      vars:
+        docker_users:
+          - '{{ ansible_user_id }}'
+      when: docker
+      tags: [docker]
+
+    - name: git
+      when: git_user_name and git_user_email
+      tags: [git]
+
+
+    - name: fonts
+      tags: [fonts]
+
+    - name: xdg
+      tags: [xdg]

@@ -2,11 +2,11 @@ meta:
   name: arch
   hostname: arch
 spec:
-  box: archlinux/archlinux
-  box_version: 2020.08.12
-  cores: 4
-  ram: 4048
-  vram: 128
+  box: generic/ubuntu2004
+  box_version: 3.2.2
+  cores: 2
+  ram: 2048
+  vram: 32
 provisioning:
   ssh_user: filwie
   ssh_private_key: '~/.ssh/id_rsa'

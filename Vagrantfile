@@ -33,7 +33,7 @@ Vagrant.configure('2') do |config|
   config.vm.hostname = conf.spec.hostname
 
   config.vm.synced_folder '.', '/vagrant', disabled: true
-  config.vm.synced_folder repo_path[:host], repo_path[:vm]
+  config.vm.synced_folder repo_path[:host], repo_path[:vm], type: "rsync"
 
   config.vm.provider :virtualbox do |vbox|
     vbox.name = conf.meta.name
@@ -50,12 +50,10 @@ Vagrant.configure('2') do |config|
     libvirt.video_vram = conf.spec.vram
   end
 
-  config.vm.provision 'shell', path: 'scripts/bootstrap.sh'
-
-  config.vagrant.plugins = 'vagrant-reload'
-  config.vm.provision :reload
+  config.vm.provision "shell", path: "prepare.sh"
 
   config.vm.provision 'ansible_local' do |ansible|
+    ansible.install = false
     ansible.playbook = 'bootstrap.yaml'
     ansible.config_file = "#{repo_path[:vm]}/ansible/ansible.cfg"
     ansible.provisioning_path = "#{repo_path[:vm]}/ansible"
@@ -66,25 +64,25 @@ Vagrant.configure('2') do |config|
     ansible.compatibility_mode = '2.0'
   end
 
-  config.vm.provision 'shell' do |sh|
-    sh.keep_color = true
-    # TODO: make paths configurable?
-    sh.inline = %({
-      sudo -Eu "#{conf.provisioning.ssh_user}" \
-        ansible-playbook -v "#{repo_path[:vm]}/ansible/setup.yaml" \
-          -i "#{repo_path[:vm]}/ansible/inventory.yaml"
-    })
-    # TODO: placing config in shared folder may cause it to be ignored
-    #       if the directory has too wide permissions
-    sh.env = {
-      'ANSIBLE_CONFIG': "#{repo_path[:vm]}/ansible/ansible.cfg",
-      'ANSIBLE_FORCE_COLOR': 'TRUE',
-      'ANSIBLE_LOCAL_TEMP': '/tmp/ansible_local'
-    }
-  end
+#  config.vm.provision 'shell' do |sh|
+#    sh.keep_color = true
+#    # TODO: make paths configurable?
+#    sh.inline = %({
+#      sudo -Eu "#{conf.provisioning.ssh_user}" \
+#        ansible-playbook -v "#{repo_path[:vm]}/ansible/setup.yaml" \
+#          -i "#{repo_path[:vm]}/ansible/inventory.yaml"
+#    })
+#    # TODO: placing config in shared folder may cause it to be ignored
+#    #       if the directory has too wide permissions
+#    sh.env = {
+#      'ANSIBLE_CONFIG': "#{repo_path[:vm]}/ansible/ansible.cfg",
+#      'ANSIBLE_FORCE_COLOR': 'TRUE',
+#      'ANSIBLE_LOCAL_TEMP': '/tmp/ansible_local'
+#    }
+#  end
 
-  if ARGV[0] == 'ssh'
-    config.ssh.private_key_path = File.expand_path(conf.provisioning.ssh_private_key)
-    config.ssh.username = conf.provisioning.ssh_user
-  end
+if ARGV[0] == 'ssh'
+  config.ssh.private_key_path = File.expand_path(conf.provisioning.ssh_private_key)
+  config.ssh.username = conf.provisioning.ssh_user
+end
 end
