@@ -1,4 +1,23 @@
 ---
+- name: fail if facts are not available
+  fail:
+    msg: Certain facts are not available. Do not disable fact gathering.
+  when: ansible_distribution is undefined or ansible_distribution_release is undefined
+
+
+- name: ubuntu-specific
+  block:
+
+    - name: include vars
+      include_vars:
+        file: ubuntu.yaml
+
+    - name: include tasks
+      include_tasks: ubuntu.yaml
+
+  when: ansible_distribution == 'Ubuntu'
+
+
 - name: install packages
   package:
     name: '{{ docker_packages }}'

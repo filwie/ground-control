@@ -8,34 +8,9 @@
 
   vars:
 
-    bluetooth: false
-    libvirt: false
     docker: true
 
   roles:
-
-    - name: arch_locale
-      tags: [arch, locale]
-
-    - name: arch_reflector
-      tags: [arch, reflector]
-
-    - name: arch_network
-      tags: [arch, network]
-
-    - name: arch_aur
-      tags: [arch, aur]
-
-    - name: arch_bluetooth
-      when: bluetooth
-      tags: [arch, bluetooth]
-
-    - name: arch_libvirt
-      vars:
-        arch_libvirt_users:
-          - '{{ ansible_user_id }}'
-      when: libvirt
-      tags: [arch, virtualization]
 
     - name: docker
       vars:
@@ -47,21 +22,3 @@
     - name: git
       when: git_user_name and git_user_email
       tags: [git]
-
-
-      # - name: arch_i3
-      #   tags: [arch, i3, gui]
-
-# - hosts: all
-#   vars:
-#     github_role_action: add
-#   roles:
-#     - name: xdg_base_directory
-#       tags: xdg
-#     - name: terminal
-#       tags: terminal
-#     - name: dotfiles
-#       tags: dotfiles
-#     - name: github
-#       tags: github
-

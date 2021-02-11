@@ -64,22 +64,22 @@ Vagrant.configure('2') do |config|
     ansible.compatibility_mode = '2.0'
   end
 
-#  config.vm.provision 'shell' do |sh|
-#    sh.keep_color = true
-#    # TODO: make paths configurable?
-#    sh.inline = %({
-#      sudo -Eu "#{conf.provisioning.ssh_user}" \
-#        ansible-playbook -v "#{repo_path[:vm]}/ansible/setup.yaml" \
-#          -i "#{repo_path[:vm]}/ansible/inventory.yaml"
-#    })
-#    # TODO: placing config in shared folder may cause it to be ignored
-#    #       if the directory has too wide permissions
-#    sh.env = {
-#      'ANSIBLE_CONFIG': "#{repo_path[:vm]}/ansible/ansible.cfg",
-#      'ANSIBLE_FORCE_COLOR': 'TRUE',
-#      'ANSIBLE_LOCAL_TEMP': '/tmp/ansible_local'
-#    }
-#  end
+config.vm.provision 'shell' do |sh|
+  sh.keep_color = true
+  # TODO: make paths configurable?
+  sh.inline = %({
+    sudo -Eu "#{conf.provisioning.ssh_user}" \
+      ansible-playbook -v "#{repo_path[:vm]}/ansible/setup.yaml" \
+        -i "#{repo_path[:vm]}/ansible/inventory.yaml"
+  })
+  # TODO: placing config in shared folder may cause it to be ignored
+  #       if the directory has too wide permissions
+  sh.env = {
+    'ANSIBLE_CONFIG': "#{repo_path[:vm]}/ansible/ansible.cfg",
+    'ANSIBLE_FORCE_COLOR': 'True',
+    'ANSIBLE_LOCAL_TEMP': '/tmp/ansible_local'
+  }
+end
 
 if ARGV[0] == 'ssh'
   config.ssh.private_key_path = File.expand_path(conf.provisioning.ssh_private_key)

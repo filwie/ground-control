@@ -1,6 +1,6 @@
 meta:
-  name: arch
-  hostname: arch
+  name: vm
+  hostname: vm
 spec:
   box: generic/ubuntu2004
   box_version: 3.2.2

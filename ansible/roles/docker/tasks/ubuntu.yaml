@@ -1,0 +1,16 @@
+---
+- name: install prerequisites
+  apt:
+    name: '{{ docker_ubuntu_prerequisites }}'
+    update_cache: yes
+  become: true
+
+- name: add docker apt key
+  apt_key:
+    url: '{{ docker_ubuntu_gpg_url }}'
+  become: true
+
+- name: add docker repo
+  apt_repository:
+    repo: '{{ docker_ubuntu_repo_url }}'
+  become: true
