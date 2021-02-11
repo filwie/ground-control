@@ -1,6 +1,0 @@
----
-- name: install packages
-  package:
-    name: '{{ arch_i3_packages.values() | flatten }}'
-    state: present
-  become: true

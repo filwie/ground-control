@@ -1,6 +1,0 @@
-arch_bluetooth_group: wheel
-arch_bluetooth_polkit_rules_file: /etc/polkit-1/rules.d/51-blueman.rules
-arch_bluetooth_packages:
-  - bluez
-  - blueman
-  - pulseaudio-bluetooth

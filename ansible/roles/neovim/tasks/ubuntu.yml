@@ -1,4 +1,0 @@
----
-- name: Add NeoVim PPA
-  apt_repository:
-    repo: ppa:neovim-ppa/stable

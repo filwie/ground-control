@@ -1,8 +1,0 @@
----
-neovim_prerequisites:
-  packages:
-    - python3
-    - python-setuptools
-    - '{{ "python-pip" if ansible_distribution == "Archlinux" else "python3-pip" }}'
-  python_modules:
-    - pynvim
