@@ -1,0 +1,42 @@
+---
+- name: create directory for harbor installer
+  file:
+    path: '{{ harbor_installer_extract_dest }}'
+    state: directory
+
+- name: download and extract harbor installer
+  unarchive:
+    src: '{{ harbor_installer_tar_url }}'
+    dest: '{{ harbor_installer_extract_dest }}'
+    remote_src: true
+    extra_opts: '--strip-components=1'
+
+- name: template harbor config
+  template:
+    src: harbor.yml.j2
+    dest: '{{ harbor_installer_extract_dest }}/harbor.yml'
+
+- name: create directory for harbor cert
+  file:
+    path: '{{ harbor_cert_dir }}'
+    state: directory
+  become: true
+
+- name: generate private key for harbor
+  community.crypto.openssl_privatekey:
+    path: '{{ harbor_private_key }}'
+  become: true
+
+- name: generate self-signed cert for harbor
+  community.crypto.x509_certificate:
+    path: '{{ harbor_cert }}'
+    privatekey_path: '{{ harbor_private_key }}'
+    provider: selfsigned
+  become: true
+
+- name: run installer
+  command:
+    cmd: '{{ harbor_installer_extract_dest }}/install.sh'
+    executable: /bin/bash
+    chdir: '{{ harbor_installer_extract_dest }}'
+  become: true

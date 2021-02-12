@@ -1,7 +1,7 @@
 ---
 - name: bootstrap vm before running actual setup playbook
   hosts: all
-  gather_facts: false
+  gather_facts: true
   vars:
 
     config_file: '{{ playbook_dir | dirname }}/config.yaml'
@@ -16,6 +16,22 @@
           - ssh_public_key is defined
 
   tasks:
+
+    - name: set hostname
+      block:
+
+        - name: replace hostname in /etc/hosts
+          replace:
+            path: /etc/hosts
+            regexp: '\b{{ ansible_hostname }}\b'
+            replace: '{{ hostname_to_set }}'
+
+        - name: set hostname
+          hostname:
+            name: '{{ hostname_to_set }}'
+
+      become: true
+
 
     - name: create user
       user:
@@ -46,10 +62,10 @@
         create: true
       become: true
 
-    - name: Generate inventory from config
+    - name: generate inventory from config
       block:
 
-        - name: Slurp config file
+        - name: slurp config file
           slurp:
             src: '{{ config_file }}'
           register: config_file_slurp
@@ -62,7 +78,7 @@
             - set_fact:
                 vars_from_config: '{{ config.provisioning.vars }}'
 
-        - name: Write inventory to file
+        - name: write inventory to file
           blockinfile:
             path: '{{ generated_inventory }}'
             create: true
@@ -76,4 +92,3 @@
                     ansible_connection: local
                 vars:
                   {{ vars_from_config | to_yaml }}
-

@@ -61,6 +61,9 @@ Vagrant.configure('2') do |config|
       "ssh_user": conf.provisioning.ssh_user,
       "ssh_public_key": file_contents(conf.provisioning.ssh_public_key).strip
     }
+    conf.provisioning.vars.to_h.each do |key, value|
+      ansible.extra_vars[key] = value
+    end
     ansible.compatibility_mode = '2.0'
   end
 

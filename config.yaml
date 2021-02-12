@@ -1,6 +1,6 @@
 meta:
-  name: vm
-  hostname: vm
+  name: harbor
+  hostname: harbor
 spec:
   box: generic/ubuntu2004
   box_version: 3.2.2
@@ -8,10 +8,9 @@ spec:
   ram: 2048
   vram: 32
 provisioning:
-  ssh_user: filwie
+  ssh_user: harbor
   ssh_private_key: '~/.ssh/id_rsa'
   ssh_public_key: '~/.ssh/id_rsa.pub'
 
   vars:
-    git_user_name: filwie
-    git_user_email: filip.wiechec@gmail.com
+    hostname_to_set: harbor

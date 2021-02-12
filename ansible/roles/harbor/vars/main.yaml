@@ -1,0 +1,5 @@
+---
+harbor_cert: '{{ harbor_cert_dir }}/harbor.crt'
+harbor_private_key: '{{ harbor_cert_dir }}/harbor.prv'
+harbor_admin_password: '{{ lookup("password", "/tmp/credentials/harbor_admin chars=ascii_letters length=10") }}'
+harbor_db_password: '{{ lookup("password", "/tmp/credentials/harbor_db chars=ascii_letters length=10") }}'

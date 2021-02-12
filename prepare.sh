@@ -2,8 +2,8 @@
 
 declare -A PM_MAP=(
     ["apt-get"]="env DEBIAN_FRONTEND=noninteractive apt-get -qq install --yes python3 python3-pip"
-    ["pacman"]="pacman -Sy --needed python3 ansible"
-    ["zypper"]="zypper --non-interactive install python3 ansible"
+    ["pacman"]="pacman -Sy --needed python3"
+    ["zypper"]="zypper --non-interactive install python3"
 )
 
 
@@ -21,4 +21,6 @@ function get_pm_cmd {
 pm_cmd="$(get_pm_cmd)"
 
 eval "${pm_cmd}"
+
 pip3 install ansible
+ansible-galaxy collection install community.crypto

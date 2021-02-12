@@ -6,19 +6,19 @@
       meta: reset_connection
       ignore_errors: true
 
-  vars:
-
-    docker: true
-
   roles:
 
     - name: docker
       vars:
         docker_users:
           - '{{ ansible_user_id }}'
-      when: docker
       tags: [docker]
 
     - name: git
       when: git_user_name and git_user_email
       tags: [git]
+
+    - name: harbor
+      vars:
+        harbor_hostname: '{{ ansible_default_ipv4.address }}'
+      tags: [harbor]

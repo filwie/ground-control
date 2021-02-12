@@ -1,0 +1,7 @@
+---
+harbor_release: v2.0.6
+harbor_installer_tar_url: 'https://github.com/goharbor/harbor/releases/download/{{ harbor_release }}/harbor-online-installer-{{ harbor_release }}.tgz'
+harbor_installer_extract_dest: /tmp/harbor/
+
+harbor_hostname: ''
+harbor_cert_dir: /usr/share/harbor
