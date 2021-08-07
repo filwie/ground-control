@@ -1,6 +1,7 @@
 ---
 - name: check if bluetooth is available
   shell: dmesg | grep -i blue
+  become: true
   register: arch_bluetooth_dmesg_result
   failed_when: false
   changed_when: false
@@ -25,7 +26,7 @@
       groups:
         - '{{ arch_bluetooth_group }}'
     become: true
-    notify: reset ansible connection
+    notify: reset connection
 
   - name: enable specified group to use bluetooth without superuser privileges
     template:

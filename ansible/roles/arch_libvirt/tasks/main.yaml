@@ -24,5 +24,5 @@
     groups: libvirt
     append: true
   become: true
-  notify: reset ansible connection
+  notify: reset connection
   loop: '{{ arch_libvirt_users }}'

@@ -1,0 +1,5 @@
+---
+handlers:
+  - name: reset connection
+    meta: reset_connection
+    ignore_errors: true

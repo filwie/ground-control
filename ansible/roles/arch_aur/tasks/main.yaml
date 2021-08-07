@@ -15,7 +15,7 @@
     create: true
     validate: 'visudo -cf %s'
   become: true
-  notify: reset ansible connection
+  notify: reset connection
 
 - meta: flush_handlers
 
